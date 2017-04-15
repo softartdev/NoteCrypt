@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name" translatable="false">Note Crypt</string>
+
+    <string name="press_add_note">Press \"+\" to add a note.</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Settings for Language -->
+    <string name="pref_header_language">Language</string>
+
+    <string name="pref_title_select_language">Select language</string>
+
+    <string-array name="pref_language_titles">
+        <item>English</item>
+        <item>Russian</item>
+    </string-array>
+
+    <string-array name="pref_language_values">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+</resources>
