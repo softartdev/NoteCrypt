@@ -9,7 +9,7 @@
     tools:context="com.softartdev.notecrypt.ui.main.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <TextView
+    <TextView android:id="@+id/add_note_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/press_add_note"
