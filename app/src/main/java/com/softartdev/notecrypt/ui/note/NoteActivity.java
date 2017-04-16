@@ -15,7 +15,7 @@ public class NoteActivity extends BaseActivity implements NoteView, View.OnClick
 
     Toolbar toolbar;
     FloatingActionButton fab;
-    EditText noteEditText;
+    EditText noteEditText, titleEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +31,7 @@ public class NoteActivity extends BaseActivity implements NoteView, View.OnClick
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
         noteEditText = (EditText) findViewById(R.id.note_edit_text);
+        titleEditText = (EditText) findViewById(R.id.note_title_edit_text);
     }
 
     @Override
@@ -44,7 +45,7 @@ public class NoteActivity extends BaseActivity implements NoteView, View.OnClick
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.fab) {
-            mPresenter.saveNote(toolbar.getTitle().toString(), noteEditText.getText().toString());
+            mPresenter.saveNote(titleEditText.getText().toString(), noteEditText.getText().toString());
         }
     }
 }
