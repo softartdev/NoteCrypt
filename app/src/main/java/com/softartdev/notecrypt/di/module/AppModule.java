@@ -8,6 +8,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import io.realm.Realm;
 
 @Module
 public class AppModule {
@@ -30,4 +31,10 @@ public class AppModule {
         return PreferenceManager.getDefaultSharedPreferences(context);
     }
 
+    @Provides
+    @Singleton
+    Realm provideRealm(Context context) {
+        Realm.init(context);
+        return Realm.getDefaultInstance();
+    }
 }
