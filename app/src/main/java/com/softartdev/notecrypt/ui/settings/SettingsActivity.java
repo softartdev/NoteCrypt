@@ -4,6 +4,7 @@ package com.softartdev.notecrypt.ui.settings;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.view.MenuItem;
 import com.softartdev.notecrypt.R;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -152,11 +154,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      * activity is showing a two-pane settings UI.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class LanguagePreferenceFragment extends PreferenceFragment {
+    public static class LanguagePreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_language);
+            getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this); // change locale immediately
             setHasOptionsMenu(true);
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
@@ -164,6 +167,41 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // updated to reflect the new value, per the Android Design
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("language"));
+        }
+
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            if (key.equals("language")) {
+                Locale locale;
+                String value = sharedPreferences.getString(key, "2");
+                switch (value) {
+                    case "1":
+                        locale = Locale.ENGLISH;
+                        break;
+                    case "2":
+                        locale = new Locale("ru");
+                        break;
+                    default:
+                        locale = Locale.getDefault();
+                        break;
+                }
+                Locale.setDefault(locale);
+                Configuration configuration = getResources().getConfiguration();
+                configuration.locale = locale;
+                onConfigurationChanged(configuration);
+            }
+        }
+
+        @Override
+        public void onConfigurationChanged(Configuration newConfig) {
+            super.onConfigurationChanged(newConfig);
+            getResources().updateConfiguration(newConfig, getResources().getDisplayMetrics());
+        }
+
+        @Override
+        public void onStop() {
+            super.onStop();
+            getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
         }
 
         @Override

@@ -5,4 +5,6 @@
     <string name="pref_title_select_language">Выберите язык</string>
     <string name="title_activity_settings">Язык</string>
     <string name="press_add_note">Нажмите \"+\", чтобы добавить заметку.</string>
+    <string name="title_activity_note">Новая заметка</string>
+    <string name="enter_the_title">Введите заголовок</string>
 </resources>
