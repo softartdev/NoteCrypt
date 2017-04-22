@@ -7,4 +7,9 @@
     <string name="press_add_note">Нажмите \"+\", чтобы добавить заметку.</string>
     <string name="title_activity_note">Новая заметка</string>
     <string name="enter_the_title">Введите заголовок</string>
+    <string name="action_delete_note">Удалить заметку</string>
+    <string name="note_delete_dialog_message">Вы уверены, что хотите удалить заметку?</string>
+    <string name="note_deleted">Заметка удалена</string>
+    <string name="note_saved">Заметка сохранена</string>
+    <string name="type_text">Введите текст</string>
 </resources>

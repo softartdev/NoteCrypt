@@ -9,11 +9,12 @@
     tools:context="com.softartdev.notecrypt.ui.note.NoteActivity"
     tools:showIn="@layout/activity_note">
 
-    <EditText android:id="@+id/note_edit_text"
+    <EditText
+        android:id="@+id/note_edit_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
-        android:inputType="textMultiLine"
-        android:text="@string/large_text"/>
+        android:hint="@string/type_text"
+        android:inputType="textMultiLine"/>
 
 </android.support.v4.widget.NestedScrollView>

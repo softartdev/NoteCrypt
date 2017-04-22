@@ -11,6 +11,7 @@ import io.realm.Realm;
 
 public class NotePresenter {
     private NoteView mView;
+    private Note mNote;
 
     @Inject
     Realm realm;
@@ -24,13 +25,33 @@ public class NotePresenter {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                Note note = realm.createObject(Note.class, UUID.randomUUID().getLeastSignificantBits());
-                note.setTitle(title);
-                note.setText(text);
-                realm.copyToRealmOrUpdate(note);
+                if (mNote == null) {
+                    mNote = realm.createObject(Note.class, UUID.randomUUID().getLeastSignificantBits());
+                }
+                mNote.setTitle(title);
+                mNote.setText(text);
+                realm.copyToRealmOrUpdate(mNote);
             }
         });
 
         mView.onSaveNote(title);
+    }
+
+    void loadNote(final long noteId) {
+        mNote = realm.where(Note.class).equalTo("id", noteId).findFirst();
+        mView.onLoadNote(mNote.getTitle(), mNote.getText());
+    }
+
+    void deleteNote() {
+        if (mNote != null) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    mNote.deleteFromRealm();
+                }
+            });
+        }
+        mNote = null;
+        mView.onDeleteNote();
     }
 }
