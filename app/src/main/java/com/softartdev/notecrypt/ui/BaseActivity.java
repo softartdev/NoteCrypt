@@ -10,10 +10,14 @@ import android.view.MenuItem;
 import com.softartdev.notecrypt.R;
 import com.softartdev.notecrypt.ui.settings.SettingsActivity;
 
+import static com.softartdev.notecrypt.ui.settings.SettingsActivity.theme;
+
 public abstract class BaseActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        theme(this);
     }
 
     @Override

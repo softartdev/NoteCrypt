@@ -18,10 +18,10 @@
     <!-- Strings related to Settings -->
     <string name="title_activity_settings">Settings</string>
 
-    <!-- Settings for Language -->
-    <string name="pref_header_language">Language</string>
+    <!-- Settings for Appearance -->
+    <string name="pref_header_appearance">Appearance</string>
 
-    <string name="pref_title_select_language">Select language</string>
+    <string name="pref_title_language">Language</string>
 
     <string-array name="pref_language_titles">
         <item>English</item>
@@ -29,6 +29,25 @@
     </string-array>
 
     <string-array name="pref_language_values">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+
+    <string name="pref_title_theme">Theme</string>
+
+    <string name="pref_default_theme">Default</string>
+    <string name="pref_dark_theme">Dark</string>
+    <string name="pref_light_theme">Light</string>
+
+    <string-array name="pref_theme_titles">
+        <item>@string/pref_default_theme</item>
+        <item>@string/pref_dark_theme</item>
+        <item>@string/pref_light_theme</item>
+    </string-array>
+
+    <string-array name="pref_theme_values">
+        <item>0</item>
         <item>1</item>
         <item>2</item>
     </string-array>

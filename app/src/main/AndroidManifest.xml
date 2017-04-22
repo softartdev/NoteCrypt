@@ -15,7 +15,6 @@
                   android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
@@ -25,19 +24,19 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".ui.settings.SettingsActivity"
-            android:label="@string/title_activity_settings"
+            android:name=".ui.note.NoteActivity"
+            android:label="@string/title_activity_note"
             android:parentActivityName=".ui.main.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             tools:targetApi="jelly_bean">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.softartdev.notecrypt.ui.main.MainActivity"/>
         </activity>
         <activity
-            android:name=".ui.note.NoteActivity"
-            android:label="@string/title_activity_note"
+            android:name=".ui.settings.SettingsActivity"
+            android:label="@string/title_activity_settings"
             android:parentActivityName=".ui.main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
             tools:targetApi="jelly_bean">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

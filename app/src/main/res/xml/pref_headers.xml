@@ -4,7 +4,7 @@
 
     <header
         android:fragment="com.softartdev.notecrypt.ui.settings.SettingsActivity$LanguagePreferenceFragment"
-        android:icon="@drawable/ic_language_black_24dp"
-        android:title="@string/pref_header_language"/>
+        android:icon="@drawable/ic_appearance_black_24dp"
+        android:title="@string/pref_header_appearance"/>
 
 </preference-headers>

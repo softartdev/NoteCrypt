@@ -2,6 +2,7 @@ package com.softartdev.notecrypt.ui.settings;
 
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -96,6 +97,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        theme(this);
         super.onCreate(savedInstanceState);
         setupActionBar();
     }
@@ -158,8 +160,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_language);
-            getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this); // change locale immediately
+            addPreferencesFromResource(R.xml.pref_appearance);
+            getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this); // change immediately
             setHasOptionsMenu(true);
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
@@ -167,6 +169,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // updated to reflect the new value, per the Android Design
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("language"));
+            bindPreferenceSummaryToValue(findPreference("theme"));
         }
 
         @Override
@@ -189,7 +192,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 Configuration configuration = getResources().getConfiguration();
                 configuration.locale = locale;
                 onConfigurationChanged(configuration);
+            } else if (key.equals("theme")) {
+                theme(getActivity());
             }
+            getActivity().recreate();
         }
 
         @Override
@@ -212,6 +218,28 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 return true;
             }
             return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public static void theme(Activity activity) {
+        String value = PreferenceManager.getDefaultSharedPreferences(activity).getString("theme", "0");
+        switch (value) {
+            case "0":
+                activity.getApplication().setTheme(R.style.AppTheme);
+                activity.setTheme(R.style.AppTheme_NoActionBar);
+                break;
+            case "1":
+                activity.getApplication().setTheme(android.R.style.Theme_Holo);
+                activity.setTheme(android.R.style.Theme_Holo_NoActionBar);
+                break;
+            case "2":
+                activity.getApplication().setTheme(android.R.style.Theme_Holo_Light);
+                activity.setTheme(android.R.style.Theme_Holo_Light_NoActionBar);
+                break;
+            default:
+                activity.getApplication().setTheme(R.style.AppTheme);
+                activity.setTheme(R.style.AppTheme_NoActionBar);
+                break;
         }
     }
 }
