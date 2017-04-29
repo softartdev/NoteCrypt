@@ -23,6 +23,16 @@
     <!-- Strings related to Settings -->
     <string name="title_activity_settings">Settings</string>
 
+    <!-- Settings for Security -->
+    <string name="pref_header_security">Security</string>
+    <string name="pref_title_enable_encryption">Enable encryption</string>
+    <string name="pref_title_set_password">Set password</string>
+    <string name="enter_password">Enter password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="enter_old_password">Enter old password</string>
+    <string name="enter_new_password">Enter new password</string>
+    <string name="repeat_new_password">Repeat new password</string>
+
     <!-- Settings for Appearance -->
     <string name="pref_header_appearance">Appearance</string>
 

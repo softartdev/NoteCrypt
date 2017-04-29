@@ -21,4 +21,12 @@
     <string name="yes">Да</string>
     <string name="note_changes_not_saved_dialog_title">Изменения не сохранены</string>
     <string name="note_empty">Заметка пуста. Введите данные.</string>
+    <string name="pref_header_security">Безопасность</string>
+    <string name="pref_title_enable_encryption">Включить шифрование</string>
+    <string name="pref_title_set_password">Установить пароль</string>
+    <string name="enter_password">Введите пароль</string>
+    <string name="confirm_password">Повторите пароль</string>
+    <string name="enter_old_password">Введите старый пароль</string>
+    <string name="enter_new_password">Введите новый пароль</string>
+    <string name="repeat_new_password">Повторите новый пароль</string>
 </resources>
