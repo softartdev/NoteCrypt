@@ -21,20 +21,34 @@ public class NotePresenter {
         mView = view;
     }
 
-    void saveNote(final String title, final String text) {
+    void createNote() {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                if (mNote == null) {
-                    mNote = realm.createObject(Note.class, UUID.randomUUID().getLeastSignificantBits());
-                }
-                mNote.setTitle(title);
-                mNote.setText(text);
-                realm.copyToRealmOrUpdate(mNote);
+                mNote = realm.createObject(Note.class, UUID.randomUUID().getLeastSignificantBits());
+                mNote.setTitle("");
+                mNote.setText("");
             }
         });
+    }
 
-        mView.onSaveNote(title);
+    void saveNote(final String title, final String text) {
+        if (mNote == null) {
+            createNote();
+        }
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                mNote.setTitle(title);
+                mNote.setText(text);
+            }
+        });
+        if (title.equals("") && text.equals("")) {
+            mView.onEmptyNote();
+        } else {
+            realm.copyToRealmOrUpdate(mNote);
+            mView.onSaveNote(title);
+        }
     }
 
     void loadNote(final long noteId) {
@@ -53,5 +67,19 @@ public class NotePresenter {
         }
         mNote = null;
         mView.onDeleteNote();
+        mView.onNavBack();
+    }
+
+    void checkSaveChange(String title, String text) {
+        String savedTitle = mNote.getTitle();
+        String savedText = mNote.getText();
+        if (!title.equals(savedTitle) || !text.equals(savedText)) {
+            mView.onCheckSaveChange();
+            return;
+        }
+        if (savedTitle.equals("") && savedText.equals("")) {
+            deleteNote();
+        }
+        mView.onNavBack();
     }
 }

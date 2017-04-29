@@ -13,6 +13,11 @@
     <string name="note_deleted">Note deleted</string>
     <string name="note_saved">Note saved</string>
     <string name="note_delete_dialog_message">Are you sure want to delete the note?</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="note_changes_not_saved_dialog_title">Changes not saved</string>
+    <string name="note_save_change_dialog_message">Do you want to save the changes?</string>
+    <string name="note_empty">The note is empty. Enter the data.</string>
 
 
     <!-- Strings related to Settings -->

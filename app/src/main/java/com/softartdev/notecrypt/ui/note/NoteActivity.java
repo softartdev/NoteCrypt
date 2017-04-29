@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -42,20 +43,30 @@ public class NoteActivity extends BaseActivity implements NoteView, View.OnClick
         long noteId = intent.getLongExtra(NOTE_ID, 0L);
         if (noteId != 0L) {
             mPresenter.loadNote(noteId);
+        } else {
+            mPresenter.createNote();
         }
     }
 
     @Override
     public void onLoadNote(String title, String text) {
         titleEditText.setText(title);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(title);
+        }
         noteEditText.setText(text);
     }
 
     @Override
     public void onSaveNote(String title) {
-        String noteSaved = getString(R.string.note_saved) +  ": " + title;
+        String noteSaved = getString(R.string.note_saved) + ": " + title;
         Snackbar.make(saveNoteFab, noteSaved, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
+    }
+
+    @Override
+    public void onEmptyNote() {
+        Snackbar.make(saveNoteFab, R.string.note_empty, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -80,11 +91,25 @@ public class NoteActivity extends BaseActivity implements NoteView, View.OnClick
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_delete_note) {
-            showDeleteDialog();
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                checkSaveChange();
+                return true;
+            case R.id.action_delete_note:
+                showDeleteDialog();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
+    }
 
-        return super.onOptionsItemSelected(item);
+    @Override
+    public void onBackPressed() {
+        checkSaveChange();
+    }
+
+    private void checkSaveChange() {
+        mPresenter.checkSaveChange(titleEditText.getText().toString(), noteEditText.getText().toString());
     }
 
     private void showDeleteDialog() {
@@ -105,5 +130,38 @@ public class NoteActivity extends BaseActivity implements NoteView, View.OnClick
                 });
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    @Override
+    public void onCheckSaveChange() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.note_changes_not_saved_dialog_title)
+                .setMessage(R.string.note_save_change_dialog_message)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mPresenter.saveNote(titleEditText.getText().toString(), noteEditText.getText().toString());
+                        onNavBack();
+                    }
+                })
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        onNavBack();
+                    }
+                })
+                .setNeutralButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    @Override
+    public void onNavBack() {
+        NavUtils.navigateUpFromSameTask(this);
     }
 }
