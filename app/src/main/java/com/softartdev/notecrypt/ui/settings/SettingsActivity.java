@@ -97,7 +97,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        theme(this);
+        settingsTheme(this);
         super.onCreate(savedInstanceState);
         setupActionBar();
     }
@@ -193,7 +193,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 configuration.locale = locale;
                 onConfigurationChanged(configuration);
             } else if (key.equals("theme")) {
-                theme(getActivity());
+                settingsTheme(getActivity());
             }
             getActivity().recreate();
         }
@@ -221,6 +221,25 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         }
     }
 
+    private static void settingsTheme(Activity settingsActivity) {
+        theme(settingsActivity);
+        String value = PreferenceManager.getDefaultSharedPreferences(settingsActivity).getString("theme", "0");
+        switch (value) {
+            case "0":
+                settingsActivity.setTheme(R.style.AppTheme);
+                break;
+            case "1":
+                settingsActivity.setTheme(R.style.DarkTheme);
+                break;
+            case "2":
+                settingsActivity.setTheme(R.style.LightTheme);
+                break;
+            default:
+                settingsActivity.setTheme(R.style.AppTheme);
+                break;
+        }
+    }
+
     public static void theme(Activity activity) {
         String value = PreferenceManager.getDefaultSharedPreferences(activity).getString("theme", "0");
         switch (value) {
@@ -229,12 +248,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 activity.setTheme(R.style.AppTheme_NoActionBar);
                 break;
             case "1":
-                activity.getApplication().setTheme(android.R.style.Theme_Holo);
-                activity.setTheme(android.R.style.Theme_Holo_NoActionBar);
+                activity.getApplication().setTheme(R.style.DarkTheme);
+                activity.setTheme(R.style.DarkTheme_NoActionBar);
                 break;
             case "2":
-                activity.getApplication().setTheme(android.R.style.Theme_Holo_Light);
-                activity.setTheme(android.R.style.Theme_Holo_Light_NoActionBar);
+                activity.getApplication().setTheme(R.style.LightTheme);
+                activity.setTheme(R.style.LightTheme_NoActionBar);
                 break;
             default:
                 activity.getApplication().setTheme(R.style.AppTheme);
