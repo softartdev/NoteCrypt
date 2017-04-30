@@ -11,4 +11,10 @@
         android:icon="@drawable/ic_appearance_black_24dp"
         android:title="@string/pref_header_appearance"/>
 
+    <header android:title="@string/pref_header_security"
+            android:icon="@drawable/ic_security_black_24dp">
+        <intent android:action="NoteCryptSecurityActivity"
+                android:targetClass="com.softartdev.notecrypt.ui.settings.SettingsActivity" />
+    </header>
+
 </preference-headers>

@@ -3,10 +3,12 @@
 
     <SwitchPreference
         android:defaultValue="false"
+        android:icon="@drawable/ic_lock_black_24dp"
         android:key="encryption"
         android:title="@string/pref_title_enable_encryption"/>
 
     <EditTextPreference
+        android:icon="@drawable/ic_password_black_24dp"
         android:inputType="textPassword"
         android:key="password"
         android:selectAllOnFocus="true"
