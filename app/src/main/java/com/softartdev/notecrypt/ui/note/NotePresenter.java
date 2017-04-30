@@ -17,7 +17,7 @@ public class NotePresenter {
     Realm realm;
 
     NotePresenter(NoteView view) {
-        App.getAppComponent().inject(this);
+        App.createDbComponent(null).inject(this);
         mView = view;
     }
 

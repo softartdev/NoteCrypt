@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 
 import com.softartdev.notecrypt.R;
+import com.softartdev.notecrypt.ui.splash.SplashActivity;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;

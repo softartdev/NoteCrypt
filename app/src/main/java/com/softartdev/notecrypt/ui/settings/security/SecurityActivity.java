@@ -26,6 +26,7 @@ public class SecurityActivity extends AppCompatActivity implements SecurityView,
         setContentView(R.layout.activity_security);
         mPresenter = new SecurityPresenter(this);
         enableEncryptionSwitch = (Switch) findViewById(R.id.enable_encryption_switch);
+        enableEncryptionSwitch.setChecked(mPresenter.isEncryption());
         enableEncryptionSwitch.setOnCheckedChangeListener(this);
         Button passButton = (Button) findViewById(R.id.set_password_button);
         passButton.setOnClickListener(this);
@@ -119,9 +120,13 @@ public class SecurityActivity extends AppCompatActivity implements SecurityView,
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (buttonView.getId() == R.id.enable_encryption_switch) {
             if (isChecked) {
-                mPresenter.pass();
+                if (!mPresenter.isEncryption()) {
+                    mPresenter.pass();
+                }
             } else {
-                showPasswordDialog();
+                if (mPresenter.isEncryption()) {
+                    showPasswordDialog();
+                }
             }
         }
     }

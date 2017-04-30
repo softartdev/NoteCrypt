@@ -15,7 +15,7 @@ public class MainPresenter {
     Realm realm;
 
     MainPresenter(MainView view) {
-        App.getAppComponent().inject(this);
+        App.createDbComponent(null).inject(this);
         mView = view;
     }
 

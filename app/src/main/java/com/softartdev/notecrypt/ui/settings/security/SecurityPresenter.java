@@ -1,10 +1,29 @@
 package com.softartdev.notecrypt.ui.settings.security;
 
-class SecurityPresenter {
+import android.content.SharedPreferences;
+
+import com.softartdev.notecrypt.App;
+
+import javax.inject.Inject;
+
+public class SecurityPresenter {
     private SecurityView mView;
+    public static final String ENCRYPTION = "encryption";
+
+    @Inject
+    SharedPreferences sharedPreferences;
 
     SecurityPresenter(SecurityView view) {
+        App.createDbComponent(null).inject(this);
         mView = view;
+    }
+
+    boolean isEncryption() {
+        return sharedPreferences.getBoolean(ENCRYPTION, false);
+    }
+
+    void setEncryption(boolean encryption) {
+        sharedPreferences.edit().putBoolean(ENCRYPTION, encryption).apply();
     }
 
     void pass() {
