@@ -32,6 +32,9 @@
     <string name="enter_old_password">Enter old password</string>
     <string name="enter_new_password">Enter new password</string>
     <string name="repeat_new_password">Repeat new password</string>
+    <string name="incorrect_password">Incorrect password</string>
+    <string name="empty_password">Password must not be empty</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
 
     <!-- Settings for Appearance -->
     <string name="pref_header_appearance">Appearance</string>

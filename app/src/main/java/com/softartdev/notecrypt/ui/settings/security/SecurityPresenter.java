@@ -9,6 +9,7 @@ import javax.inject.Inject;
 public class SecurityPresenter {
     private SecurityView mView;
     public static final String ENCRYPTION = "encryption";
+    private static final String PASSWORD = "password";
 
     @Inject
     SharedPreferences sharedPreferences;
@@ -22,23 +23,56 @@ public class SecurityPresenter {
         return sharedPreferences.getBoolean(ENCRYPTION, false);
     }
 
-    void setEncryption(boolean encryption) {
+    private void setEncryption(boolean encryption) {
+        mView.showEncryptEnable(encryption);
         sharedPreferences.edit().putBoolean(ENCRYPTION, encryption).apply();
+    }
+
+    private String getPassword() {
+        return sharedPreferences.getString(PASSWORD, "");
+    }
+
+    private void setPassword(String password) {
+        sharedPreferences.edit().putString(PASSWORD, password).apply();
     }
 
     void pass() {
         mView.onPass();
     }
 
-    void enterPass(String pass) {
-
+    boolean enterPass(SecurityView.DialogDirector pass) {
+        pass.hideError();
+        if (pass.getTextString().length() == 0) {
+            pass.showEmptyPasswordError();
+            return false;
+        }
+        if (pass.getTextString().equals(getPassword())) {
+            setEncryption(false);
+            return true;
+        } else {
+            pass.showIncorrectPasswordError();
+            return false;
+        }
     }
 
-    void setPass(String pass, String repeatPass) {
-
+    boolean setPass(SecurityView.DialogDirector pass, SecurityView.DialogDirector repeatPass) {
+        pass.hideError();
+        if (pass.getTextString().equals(repeatPass.getTextString())) {
+            if (pass.getTextString().length() == 0) {
+                pass.showEmptyPasswordError();
+                return false;
+            } else {
+                setPassword(pass.getTextString());
+                setEncryption(true);
+                return true;
+            }
+        } else {
+            repeatPass.showPasswordsNoMatchError();
+            return false;
+        }
     }
 
-    void changePass(String oldPass, String newPass, String repeatNewPass) {
-
+    boolean changePass(SecurityView.DialogDirector oldPass, SecurityView.DialogDirector newPass, SecurityView.DialogDirector repeatNewPass) {
+        return enterPass(oldPass) && setPass(newPass, repeatNewPass);
     }
 }

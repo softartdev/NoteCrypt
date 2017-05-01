@@ -29,4 +29,7 @@
     <string name="enter_old_password">Введите старый пароль</string>
     <string name="enter_new_password">Введите новый пароль</string>
     <string name="repeat_new_password">Повторите новый пароль</string>
+    <string name="empty_password">Пароль не должен быть пустым</string>
+    <string name="incorrect_password">Неверный пароль</string>
+    <string name="passwords_do_not_match">Пароли не совпадают</string>
 </resources>
