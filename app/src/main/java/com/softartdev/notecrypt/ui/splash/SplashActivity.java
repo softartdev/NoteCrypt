@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.softartdev.notecrypt.ui.main.MainActivity;
+import com.softartdev.notecrypt.ui.signin.SignInActivity;
 
 import java.util.Locale;
 
@@ -22,7 +23,9 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
 
     @Override
     public void navSignIn() {
-        //TODO
+        Intent intent = new Intent(this, SignInActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override

@@ -3,6 +3,11 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.softartdev.notecrypt">
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.READ_PROFILE"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -44,18 +49,25 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.softartdev.notecrypt.ui.main.MainActivity"/>
         </activity>
-        <activity android:name=".ui.settings.security.SecurityActivity"
-                  android:label="@string/pref_header_security"
-                  android:theme="@style/AppTheme"
-                  android:parentActivityName=".ui.settings.SettingsActivity"
-                  tools:targetApi="jelly_bean">
+        <activity
+            android:name=".ui.settings.security.SecurityActivity"
+            android:label="@string/pref_header_security"
+            android:parentActivityName=".ui.settings.SettingsActivity"
+            android:theme="@style/AppTheme"
+            tools:targetApi="jelly_bean">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.softartdev.notecrypt.ui.settings.SettingsActivity"/>
+
             <intent-filter>
                 <action android:name="NoteCryptSecurityActivity"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.signin.SignInActivity"
+            android:label="@string/title_activity_sign_in">
         </activity>
     </application>
 
