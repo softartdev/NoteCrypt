@@ -67,7 +67,7 @@
         </activity>
         <activity
             android:name=".ui.signin.SignInActivity"
-            android:label="@string/title_activity_sign_in">
+            android:label="@string/sign_in">
         </activity>
     </application>
 
