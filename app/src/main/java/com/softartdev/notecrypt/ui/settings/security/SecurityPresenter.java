@@ -9,7 +9,7 @@ import javax.inject.Inject;
 public class SecurityPresenter {
     private SecurityView mView;
     public static final String ENCRYPTION = "encryption";
-    private static final String PASSWORD = "password";
+    public static final String PASSWORD = "password";
 
     @Inject
     SharedPreferences sharedPreferences;
