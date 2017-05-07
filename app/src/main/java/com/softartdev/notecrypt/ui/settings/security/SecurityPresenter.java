@@ -24,7 +24,6 @@ public class SecurityPresenter {
     }
 
     private void setEncryption(boolean encryption) {
-        mView.showEncryptEnable(encryption);
         sharedPreferences.edit().putBoolean(ENCRYPTION, encryption).apply();
     }
 
@@ -36,43 +35,87 @@ public class SecurityPresenter {
         sharedPreferences.edit().putString(PASSWORD, password).apply();
     }
 
-    void pass() {
-        mView.onPass();
+    void changeEncryption(boolean checked) {
+        if (checked) {
+            mView.showSetPasswordDialog();
+        } else {
+            if (isEncryption()) {
+                mView.showPasswordDialog();
+            } else {
+                mView.showEncryptEnable(false);
+            }
+        }
     }
 
-    boolean enterPass(SecurityView.DialogDirector pass) {
+    void changePassword() {
+        if (isEncryption()) {
+            mView.showChangePasswordDialog();
+        } else {
+            mView.showSetPasswordDialog();
+        }
+    }
+
+    // only to disable encryption
+    boolean enterPassCorrect(SecurityView.DialogDirector pass) {
         pass.hideError();
+
         if (pass.getTextString().length() == 0) {
             pass.showEmptyPasswordError();
-            return false;
-        }
-        if (pass.getTextString().equals(getPassword())) {
+            mView.showEncryptEnable(true);
+        } else if (pass.getTextString().equals(getPassword())) {
             setEncryption(false);
+            mView.showEncryptEnable(false);
             return true;
         } else {
             pass.showIncorrectPasswordError();
-            return false;
+            mView.showEncryptEnable(true);
         }
+
+        return false;
     }
 
-    boolean setPass(SecurityView.DialogDirector pass, SecurityView.DialogDirector repeatPass) {
+    // only to enable encryption
+    boolean setPassCorrect(SecurityView.DialogDirector pass, SecurityView.DialogDirector repeatPass) {
         pass.hideError();
+        repeatPass.hideError();
+
         if (pass.getTextString().equals(repeatPass.getTextString())) {
             if (pass.getTextString().length() == 0) {
                 pass.showEmptyPasswordError();
-                return false;
             } else {
                 setPassword(pass.getTextString());
                 setEncryption(true);
+                mView.showEncryptEnable(true);
                 return true;
             }
         } else {
             repeatPass.showPasswordsNoMatchError();
-            return false;
         }
+
+        return false;
     }
 
-    boolean changePass(SecurityView.DialogDirector oldPass, SecurityView.DialogDirector newPass, SecurityView.DialogDirector repeatNewPass) {
-        return enterPass(oldPass) && setPass(newPass, repeatNewPass);
+    // only when encryption is enabled
+    boolean changePassCorrect(SecurityView.DialogDirector oldPass, SecurityView.DialogDirector newPass, SecurityView.DialogDirector repeatNewPass) {
+        oldPass.hideError();
+        newPass.hideError();
+        repeatNewPass.hideError();
+
+        if (oldPass.getTextString().length() == 0) {
+            oldPass.showEmptyPasswordError();
+        } else if (oldPass.getTextString().equals(getPassword())) {
+            if (newPass.getTextString().length() == 0) {
+                newPass.showEmptyPasswordError();
+            } else if (newPass.getTextString().equals(repeatNewPass.getTextString())) {
+                setPassword(newPass.getTextString());
+                return true;
+            } else {
+                repeatNewPass.showPasswordsNoMatchError();
+            }
+        } else {
+            oldPass.showIncorrectPasswordError();
+        }
+
+        return false;
     }
 }
