@@ -2,7 +2,9 @@ package com.softartdev.notecrypt.ui.settings.security;
 
 interface SecurityView {
     void showEncryptEnable(boolean encryption);
-    void onPass();
+    void showPasswordDialog();
+    void showSetPasswordDialog();
+    void showChangePasswordDialog();
 
     interface DialogDirector {
         String getTextString();

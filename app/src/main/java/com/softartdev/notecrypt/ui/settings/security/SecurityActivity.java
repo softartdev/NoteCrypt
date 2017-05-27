@@ -2,12 +2,13 @@ package com.softartdev.notecrypt.ui.settings.security;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -34,20 +35,30 @@ public class SecurityActivity extends AppCompatActivity implements SecurityView,
     }
 
     @Override
-    public void showEncryptEnable(boolean encryption) {
-        enableEncryptionSwitch.setChecked(encryption);
-    }
-
-    @Override
-    public void onPass() {
-        if (enableEncryptionSwitch.isChecked()) {
-            showChangePasswordDialog();
-        } else {
-            showSetPasswordDialog();
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (buttonView.getId() == R.id.enable_encryption_switch) {
+            mPresenter.changeEncryption(isChecked);
         }
     }
 
-    private void showPasswordDialog() {
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.set_password_button:
+                mPresenter.changePassword();
+                break;
+        }
+    }
+
+    @Override
+    public void showEncryptEnable(boolean encryption) {
+        enableEncryptionSwitch.setOnCheckedChangeListener(null);
+        enableEncryptionSwitch.setChecked(encryption);
+        enableEncryptionSwitch.setOnCheckedChangeListener(this);
+    }
+
+    @Override
+    public void showPasswordDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.dialog_password, null);
@@ -70,7 +81,7 @@ public class SecurityActivity extends AppCompatActivity implements SecurityView,
                     @Override
                     public void onClick(View v) {
                         DialogDirector pass = new PassMediator(enterPassTextInputLayout, enterPassEditText);
-                        if (mPresenter.enterPass(pass)) {
+                        if (mPresenter.enterPassCorrect(pass)) {
                             alertDialog.dismiss();
                         }
                     }
@@ -80,7 +91,8 @@ public class SecurityActivity extends AppCompatActivity implements SecurityView,
         alertDialog.show();
     }
 
-    private void showSetPasswordDialog() {
+    @Override
+    public void showSetPasswordDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.dialog_set_password, null);
@@ -106,7 +118,7 @@ public class SecurityActivity extends AppCompatActivity implements SecurityView,
                     public void onClick(View v) {
                         DialogDirector pass = new PassMediator(setPassTextInputLayout, setPassEditText);
                         DialogDirector repeatPass = new PassMediator(repeatSetPassTextInputLayout, repeatSetPassEditText);
-                        if (mPresenter.setPass(pass, repeatPass)) {
+                        if (mPresenter.setPassCorrect(pass, repeatPass)) {
                             alertDialog.dismiss();
                         }
                     }
@@ -116,7 +128,8 @@ public class SecurityActivity extends AppCompatActivity implements SecurityView,
         alertDialog.show();
     }
 
-    private void showChangePasswordDialog() {
+    @Override
+    public void showChangePasswordDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.dialog_change_password, null);
@@ -145,7 +158,7 @@ public class SecurityActivity extends AppCompatActivity implements SecurityView,
                         DialogDirector oldPass = new PassMediator(oldPassTextInputLayout, oldPassEditText);
                         DialogDirector newPass = new PassMediator(newPassTextInputLayout, newPassEditText);
                         DialogDirector repeatNewPass = new PassMediator(repeatPassTextInputLayout, repeatNewPassEditText);
-                        if (mPresenter.changePass(oldPass, newPass, repeatNewPass)) {
+                        if (mPresenter.changePassCorrect(oldPass, newPass, repeatNewPass)) {
                             alertDialog.dismiss();
                         }
                     }
@@ -191,30 +204,6 @@ public class SecurityActivity extends AppCompatActivity implements SecurityView,
     }
 
     @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (buttonView.getId() == R.id.enable_encryption_switch) {
-            if (isChecked) {
-                if (!mPresenter.isEncryption()) {
-                    mPresenter.pass();
-                }
-            } else {
-                if (mPresenter.isEncryption()) {
-                    showPasswordDialog();
-                }
-            }
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.set_password_button:
-                mPresenter.pass();
-                break;
-        }
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -223,5 +212,10 @@ public class SecurityActivity extends AppCompatActivity implements SecurityView,
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return true;
     }
 }

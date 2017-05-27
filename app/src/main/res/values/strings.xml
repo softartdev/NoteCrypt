@@ -19,6 +19,9 @@
     <string name="note_save_change_dialog_message">Do you want to save the changes?</string>
     <string name="note_empty">The note is empty. Enter the data.</string>
 
+    <!-- Strings related to Sign In -->
+    <string name="sign_in">Sign in</string>
+
 
     <!-- Strings related to Settings -->
     <string name="title_activity_settings">Settings</string>
@@ -46,7 +49,7 @@
         <item>Russian</item>
     </string-array>
 
-    <string-array name="pref_language_values">
+    <string-array name="pref_language_values" translatable="false">
         <item>1</item>
         <item>2</item>
     </string-array>
@@ -64,7 +67,7 @@
         <item>@string/pref_light_theme</item>
     </string-array>
 
-    <string-array name="pref_theme_values">
+    <string-array name="pref_theme_values" translatable="false">
         <item>0</item>
         <item>1</item>
         <item>2</item>
