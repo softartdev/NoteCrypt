@@ -33,4 +33,8 @@
     <string name="incorrect_password">Неверный пароль</string>
     <string name="passwords_do_not_match">Пароли не совпадают</string>
     <string name="sign_in">Войти</string>
+    <string-array name="pref_language_titles">
+        <item>Английский</item>
+        <item>Русский</item>
+    </string-array>
 </resources>
