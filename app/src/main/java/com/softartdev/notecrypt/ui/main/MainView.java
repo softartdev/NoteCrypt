@@ -4,7 +4,9 @@ import com.softartdev.notecrypt.model.Note;
 
 import io.realm.RealmResults;
 
-public interface MainView {
+interface MainView {
+    void onNote(long noteId);
+
     void onAddNote();
 
     void onUpdateNotes(RealmResults<Note> notes);

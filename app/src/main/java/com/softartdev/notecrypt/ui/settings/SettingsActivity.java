@@ -2,6 +2,7 @@ package com.softartdev.notecrypt.ui.settings;
 
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +14,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
@@ -96,6 +98,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        settingsTheme(this);
         super.onCreate(savedInstanceState);
         setupActionBar();
     }
@@ -146,20 +149,42 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      */
     protected boolean isValidFragment(String fragmentName) {
         return PreferenceFragment.class.getName().equals(fragmentName)
+                || SecurityPreferenceFragment.class.getName().equals(fragmentName)
                 || LanguagePreferenceFragment.class.getName().equals(fragmentName);
     }
 
-    /**
-     * This fragment shows language preferences only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class LanguagePreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+    public static class SettingsFragment extends PreferenceFragment {
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                startActivity(new Intent(getActivity(), SettingsActivity.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class SecurityPreferenceFragment extends SettingsFragment {
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_security);
+            setHasOptionsMenu(true);
+
+            bindPreferenceSummaryToValue(findPreference("password"));
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class LanguagePreferenceFragment extends SettingsFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_language);
-            getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this); // change locale immediately
+            addPreferencesFromResource(R.xml.pref_appearance);
+            getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this); // change immediately
             setHasOptionsMenu(true);
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
@@ -167,6 +192,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // updated to reflect the new value, per the Android Design
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("language"));
+            bindPreferenceSummaryToValue(findPreference("theme"));
         }
 
         @Override
@@ -189,7 +215,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 Configuration configuration = getResources().getConfiguration();
                 configuration.locale = locale;
                 onConfigurationChanged(configuration);
+            } else if (key.equals("theme")) {
+                settingsTheme(getActivity());
             }
+            getActivity().recreate();
         }
 
         @Override
@@ -203,15 +232,46 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             super.onStop();
             getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
         }
+    }
 
-        @Override
-        public boolean onOptionsItemSelected(MenuItem item) {
-            int id = item.getItemId();
-            if (id == android.R.id.home) {
-                startActivity(new Intent(getActivity(), SettingsActivity.class));
-                return true;
-            }
-            return super.onOptionsItemSelected(item);
+    private static void settingsTheme(Activity settingsActivity) {
+        theme(settingsActivity);
+        String value = PreferenceManager.getDefaultSharedPreferences(settingsActivity).getString("theme", "0");
+        switch (value) {
+            case "0":
+                settingsActivity.setTheme(R.style.AppTheme);
+                break;
+            case "1":
+                settingsActivity.setTheme(R.style.DarkTheme);
+                break;
+            case "2":
+                settingsActivity.setTheme(R.style.LightTheme);
+                break;
+            default:
+                settingsActivity.setTheme(R.style.AppTheme);
+                break;
+        }
+    }
+
+    public static void theme(Activity activity) {
+        String value = PreferenceManager.getDefaultSharedPreferences(activity).getString("theme", "0");
+        switch (value) {
+            case "0":
+                activity.getApplication().setTheme(R.style.AppTheme);
+                activity.setTheme(R.style.AppTheme_NoActionBar);
+                break;
+            case "1":
+                activity.getApplication().setTheme(R.style.DarkTheme);
+                activity.setTheme(R.style.DarkTheme_NoActionBar);
+                break;
+            case "2":
+                activity.getApplication().setTheme(R.style.LightTheme);
+                activity.setTheme(R.style.LightTheme_NoActionBar);
+                break;
+            default:
+                activity.getApplication().setTheme(R.style.AppTheme);
+                activity.setTheme(R.style.AppTheme_NoActionBar);
+                break;
         }
     }
 }

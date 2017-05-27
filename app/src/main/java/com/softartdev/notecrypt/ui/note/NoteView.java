@@ -1,5 +1,10 @@
 package com.softartdev.notecrypt.ui.note;
 
-public interface NoteView {
+interface NoteView {
+    void onLoadNote(String title, String text);
     void onSaveNote(String title);
+    void onEmptyNote();
+    void onDeleteNote();
+    void onCheckSaveChange();
+    void onNavBack();
 }

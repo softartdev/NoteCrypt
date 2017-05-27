@@ -9,9 +9,11 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".ui.SplashActivity"
-                  android:theme="@style/SplashTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        <activity
+            android:name=".ui.splash.SplashActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -24,6 +26,16 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
+            android:name=".ui.note.NoteActivity"
+            android:label="@string/title_activity_note"
+            android:parentActivityName=".ui.main.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.softartdev.notecrypt.ui.main.MainActivity"/>
+        </activity>
+        <activity
             android:name=".ui.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".ui.main.MainActivity"
@@ -33,14 +45,24 @@
                 android:value="com.softartdev.notecrypt.ui.main.MainActivity"/>
         </activity>
         <activity
-            android:name=".ui.note.NoteActivity"
-            android:label="@string/title_activity_note"
-            android:parentActivityName=".ui.main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:name=".ui.settings.security.SecurityActivity"
+            android:label="@string/pref_header_security"
+            android:parentActivityName=".ui.settings.SettingsActivity"
+            android:theme="@style/AppTheme"
             tools:targetApi="jelly_bean">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.softartdev.notecrypt.ui.main.MainActivity"/>
+                android:value="com.softartdev.notecrypt.ui.settings.SettingsActivity"/>
+
+            <intent-filter>
+                <action android:name="NoteCryptSecurityActivity"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.signin.SignInActivity"
+            android:label="@string/sign_in">
         </activity>
     </application>
 

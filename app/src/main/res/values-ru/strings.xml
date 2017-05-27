@@ -1,10 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="action_settings">Настройки</string>
-    <string name="pref_header_language">Язык</string>
-    <string name="pref_title_select_language">Выберите язык</string>
-    <string name="title_activity_settings">Язык</string>
+    <string name="pref_header_appearance">Внешний вид</string>
+    <string name="pref_title_language">Язык</string>
+    <string name="title_activity_settings">Настройки</string>
     <string name="press_add_note">Нажмите \"+\", чтобы добавить заметку.</string>
     <string name="title_activity_note">Новая заметка</string>
     <string name="enter_the_title">Введите заголовок</string>
+    <string name="action_delete_note">Удалить заметку</string>
+    <string name="note_delete_dialog_message">Вы уверены, что хотите удалить заметку?</string>
+    <string name="note_deleted">Заметка удалена</string>
+    <string name="note_saved">Заметка сохранена</string>
+    <string name="type_text">Введите текст</string>
+    <string name="pref_title_theme">Цветовая схема</string>
+    <string name="pref_dark_theme">Тёмная</string>
+    <string name="pref_default_theme">По-умолчанию</string>
+    <string name="pref_light_theme">Светлая</string>
+    <string name="note_save_change_dialog_message">Сохранить изменения?</string>
+    <string name="no">Нет</string>
+    <string name="yes">Да</string>
+    <string name="note_changes_not_saved_dialog_title">Изменения не сохранены</string>
+    <string name="note_empty">Заметка пуста. Введите данные.</string>
+    <string name="pref_header_security">Безопасность</string>
+    <string name="pref_title_enable_encryption">Включить шифрование</string>
+    <string name="pref_title_set_password">Установить пароль</string>
+    <string name="enter_password">Введите пароль</string>
+    <string name="confirm_password">Повторите пароль</string>
+    <string name="enter_old_password">Введите старый пароль</string>
+    <string name="enter_new_password">Введите новый пароль</string>
+    <string name="repeat_new_password">Повторите новый пароль</string>
+    <string name="empty_password">Пароль не должен быть пустым</string>
+    <string name="incorrect_password">Неверный пароль</string>
+    <string name="passwords_do_not_match">Пароли не совпадают</string>
+    <string name="sign_in">Войти</string>
+    <string-array name="pref_language_titles">
+        <item>Английский</item>
+        <item>Русский</item>
+    </string-array>
 </resources>

@@ -1,5 +1,6 @@
-package com.softartdev.notecrypt.ui.note;
+package com.softartdev.notecrypt.ui.main;
 
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,21 +12,24 @@ import com.softartdev.notecrypt.model.Note;
 
 import io.realm.RealmResults;
 
-public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
+class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     private RealmResults<Note> mNotes;
+    private MainView mMainView;
 
-    public NoteAdapter(RealmResults<Note> notes) {
+    MainAdapter(RealmResults<Note> notes, MainView mainView) {
         mNotes = notes;
+        mMainView = mainView;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
+        CardView itemCardView;
         TextView titleTextView;
 
         ViewHolder(View v) {
             super(v);
+            itemCardView = (CardView) v.findViewById(R.id.item_note_card_view);
             titleTextView = (TextView) v.findViewById(R.id.item_note_title_text_view);
         }
-
     }
 
     @Override
@@ -36,8 +40,14 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Note note = mNotes.get(position);
+        final Note note = mNotes.get(position);
         holder.titleTextView.setText(note.getTitle());
+        holder.itemCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mMainView.onNote(note.getId());
+            }
+        });
     }
 
     @Override
