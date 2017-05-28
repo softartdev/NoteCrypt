@@ -5,8 +5,6 @@ import android.support.annotation.Nullable;
 
 import com.softartdev.notecrypt.di.scope.DbScope;
 
-import java.util.Arrays;
-
 import dagger.Module;
 import dagger.Provides;
 import io.realm.Realm;
