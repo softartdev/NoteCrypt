@@ -9,6 +9,8 @@ import com.softartdev.notecrypt.di.component.DbComponent;
 import com.softartdev.notecrypt.di.module.AppModule;
 import com.softartdev.notecrypt.di.module.DbModule;
 
+import io.realm.Realm;
+
 public class App extends Application {
     private static AppComponent appComponent;
     private static DbComponent dbComponent;
@@ -19,6 +21,7 @@ public class App extends Application {
         appComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
                 .build();
+        Realm.init(this);
     }
 
     public static AppComponent getAppComponent() {

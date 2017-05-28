@@ -1,6 +1,5 @@
 package com.softartdev.notecrypt.di.module;
 
-import android.content.Context;
 import android.support.annotation.Nullable;
 
 import com.softartdev.notecrypt.di.scope.DbScope;
@@ -21,8 +20,7 @@ public class DbModule {
 
     @Provides
     @DbScope
-    Realm provideRealm(Context context) {
-        Realm.init(context);
+    Realm provideRealm() {
         RealmConfiguration.Builder builder = new RealmConfiguration.Builder();
         if (mPassword != null) {
             builder.encryptionKey(getSecureKey());

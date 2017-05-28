@@ -8,7 +8,8 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import static com.softartdev.notecrypt.ui.settings.security.SecurityPresenter.ENCRYPTION;
+import io.realm.Realm;
+import io.realm.exceptions.RealmFileException;
 
 public class SplashPresenter {
     private SplashView mView;
@@ -22,7 +23,13 @@ public class SplashPresenter {
     }
 
     private boolean isEncryption() {
-        return sharedPreferences.getBoolean(ENCRYPTION, false);
+        try {
+            Realm realm = Realm.getDefaultInstance();
+            return realm == null;
+        } catch (RealmFileException e) {
+            e.printStackTrace();
+            return true;
+        }
     }
 
     void checkEncryption() {

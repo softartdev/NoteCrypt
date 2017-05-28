@@ -1,36 +1,43 @@
 package com.softartdev.notecrypt.ui.signin;
 
-import android.content.SharedPreferences;
-
 import com.softartdev.notecrypt.App;
 
 import javax.inject.Inject;
 
-import static com.softartdev.notecrypt.ui.settings.security.SecurityPresenter.PASSWORD;
+import io.realm.Realm;
+import io.realm.exceptions.RealmFileException;
 
 public class SignInPresenter {
     private SignInView mView;
 
     @Inject
-    SharedPreferences sharedPreferences;
+    Realm realm;
 
     SignInPresenter(SignInView signInView) {
-        App.getAppComponent().inject(this);
         mView = signInView;
-    }
-
-    private String getPassword() {
-        return sharedPreferences.getString(PASSWORD, "");
     }
 
     void signIn(String pass) {
         mView.hideError();
         if (pass.length() == 0) {
             mView.showEmptyPassError();
-        } else if (pass.equals(getPassword())) {
+        } else if (checkPass(pass)) {
             mView.navMain();
         } else {
             mView.showIncorrectPassError();
         }
+    }
+
+    private boolean checkPass(String pass) {
+        boolean check;
+        try {
+            App.clearDbComponent();
+            App.createDbComponent(pass).inject(this);
+            check = realm != null;
+        } catch (RealmFileException e) {
+            e.printStackTrace();
+            check = false;
+        }
+        return check;
     }
 }
