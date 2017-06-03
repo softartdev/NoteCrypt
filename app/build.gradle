@@ -38,6 +38,12 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
     provided "javax.annotation:jsr250-api:1.0"
 
+    debugCompile ('com.github.jonasrottmann.realm-browser:realm-browser:0.0.13') {
+        exclude group: 'com.android.support';
+    }
+//    testCompile 'com.github.jonasrottmann.realm-browser:realm-browser-no-op:0.0.13'
+//    releaseCompile 'com.github.jonasrottmann.realm-browser:realm-browser-no-op:0.0.13'
+
     testCompile "junit:junit:4.12"
 
     androidTestCompile("com.android.support.test.espresso:espresso-core:2.2.2", {

@@ -23,3 +23,8 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Realm Browser
+-keep class de.jonasrottmann.realmbrowser.* { *; }
+-keep class android.support.v7.widget.SearchView { *; }
+-keep class android.support.v7.view.** { *; }
