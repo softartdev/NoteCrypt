@@ -1,38 +1,33 @@
 package com.softartdev.notecrypt.ui.settings.security;
 
-import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 import com.softartdev.notecrypt.App;
+import com.softartdev.notecrypt.db.DbStore;
 
 import javax.inject.Inject;
 
 public class SecurityPresenter {
     private SecurityView mView;
-    public static final String ENCRYPTION = "encryption";
-    public static final String PASSWORD = "password";
 
     @Inject
-    SharedPreferences sharedPreferences;
+    DbStore dbStore;
 
     SecurityPresenter(SecurityView view) {
-        App.createDbComponent(null).inject(this);
+        App.getAppComponent().inject(this);
         mView = view;
     }
 
     boolean isEncryption() {
-        return sharedPreferences.getBoolean(ENCRYPTION, false);
+        return dbStore.isEncryption();
     }
 
-    private void setEncryption(boolean encryption) {
-        sharedPreferences.edit().putBoolean(ENCRYPTION, encryption).apply();
+    private boolean checkPass(String pass) {
+        return dbStore.checkPass(pass);
     }
 
-    private String getPassword() {
-        return sharedPreferences.getString(PASSWORD, "");
-    }
-
-    private void setPassword(String password) {
-        sharedPreferences.edit().putString(PASSWORD, password).apply();
+    private void changePassword(String odlPass, String newPass) {
+        dbStore.changePass(odlPass, newPass);
     }
 
     void changeEncryption(boolean checked) {
@@ -59,11 +54,12 @@ public class SecurityPresenter {
     boolean enterPassCorrect(SecurityView.DialogDirector pass) {
         pass.hideError();
 
-        if (pass.getTextString().length() == 0) {
+        String password = pass.getTextString();
+        if (TextUtils.isEmpty(password)) {
             pass.showEmptyPasswordError();
             mView.showEncryptEnable(true);
-        } else if (pass.getTextString().equals(getPassword())) {
-            setEncryption(false);
+        } else if (checkPass(password)) {
+            changePassword(password, null);
             mView.showEncryptEnable(false);
             return true;
         } else {
@@ -79,12 +75,13 @@ public class SecurityPresenter {
         pass.hideError();
         repeatPass.hideError();
 
-        if (pass.getTextString().equals(repeatPass.getTextString())) {
-            if (pass.getTextString().length() == 0) {
+        String password = pass.getTextString();
+        String repeatPassword = repeatPass.getTextString();
+        if (password.equals(repeatPassword)) {
+            if (TextUtils.isEmpty(password)) {
                 pass.showEmptyPasswordError();
             } else {
-                setPassword(pass.getTextString());
-                setEncryption(true);
+                changePassword(null, password);
                 mView.showEncryptEnable(true);
                 return true;
             }
@@ -101,13 +98,16 @@ public class SecurityPresenter {
         newPass.hideError();
         repeatNewPass.hideError();
 
-        if (oldPass.getTextString().length() == 0) {
+        String oldPassword = oldPass.getTextString();
+        String newPassword = newPass.getTextString();
+        String repeatNewPassword = repeatNewPass.getTextString();
+        if (TextUtils.isEmpty(oldPassword)) {
             oldPass.showEmptyPasswordError();
-        } else if (oldPass.getTextString().equals(getPassword())) {
-            if (newPass.getTextString().length() == 0) {
+        } else if (checkPass(oldPassword)) {
+            if (TextUtils.isEmpty(newPassword)) {
                 newPass.showEmptyPasswordError();
-            } else if (newPass.getTextString().equals(repeatNewPass.getTextString())) {
-                setPassword(newPass.getTextString());
+            } else if (newPassword.equals(repeatNewPassword)) {
+                changePassword(oldPassword, newPassword);
                 return true;
             } else {
                 repeatNewPass.showPasswordsNoMatchError();

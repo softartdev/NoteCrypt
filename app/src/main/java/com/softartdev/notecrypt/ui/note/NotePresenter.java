@@ -1,69 +1,50 @@
 package com.softartdev.notecrypt.ui.note;
 
+import android.text.TextUtils;
+
 import com.softartdev.notecrypt.App;
+import com.softartdev.notecrypt.db.DbStore;
 import com.softartdev.notecrypt.model.Note;
 
-import java.util.UUID;
-
 import javax.inject.Inject;
-
-import io.realm.Realm;
 
 public class NotePresenter {
     private NoteView mView;
     private Note mNote;
 
     @Inject
-    Realm realm;
+    DbStore dbStore;
 
     NotePresenter(NoteView view) {
-        App.createDbComponent(null).inject(this);
+        App.getAppComponent().inject(this);
         mView = view;
     }
 
     void createNote() {
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                mNote = realm.createObject(Note.class, UUID.randomUUID().getLeastSignificantBits());
-                mNote.setTitle("");
-                mNote.setText("");
-            }
-        });
+        mNote = dbStore.createNote();
     }
 
     void saveNote(final String title, final String text) {
         if (mNote == null) {
             createNote();
         }
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                mNote.setTitle(title);
-                mNote.setText(text);
-            }
-        });
-        if (title.equals("") && text.equals("")) {
+
+        if (TextUtils.isEmpty(title) && TextUtils.isEmpty(text)) {
             mView.onEmptyNote();
         } else {
-            realm.copyToRealmOrUpdate(mNote);
+            dbStore.saveNote(mNote.getId(), title, text);
             mView.onSaveNote(title);
         }
     }
 
     void loadNote(final long noteId) {
-        mNote = realm.where(Note.class).equalTo("id", noteId).findFirst();
+        mNote = dbStore.loadNote(noteId);
         mView.onLoadNote(mNote.getTitle(), mNote.getText());
     }
 
     void deleteNote() {
         if (mNote != null) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    mNote.deleteFromRealm();
-                }
-            });
+            dbStore.deleteNote(mNote.getId());
         }
         mNote = null;
         mView.onDeleteNote();

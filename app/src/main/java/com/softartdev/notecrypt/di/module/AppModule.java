@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.softartdev.notecrypt.db.DbStore;
+import com.softartdev.notecrypt.db.RealmDbStore;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -27,5 +30,11 @@ public class AppModule {
     @Singleton
     SharedPreferences provideSharedPreferences(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context);
+    }
+
+    @Provides
+    @Singleton
+    DbStore provideDbStore(Context context) {
+        return new RealmDbStore(context);
     }
 }

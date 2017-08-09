@@ -1,19 +1,18 @@
 package com.softartdev.notecrypt.ui.signin;
 
 import com.softartdev.notecrypt.App;
+import com.softartdev.notecrypt.db.DbStore;
 
 import javax.inject.Inject;
-
-import io.realm.Realm;
-import io.realm.exceptions.RealmFileException;
 
 public class SignInPresenter {
     private SignInView mView;
 
     @Inject
-    Realm realm;
+    DbStore dbStore;
 
     SignInPresenter(SignInView signInView) {
+        App.getAppComponent().inject(this);
         mView = signInView;
     }
 
@@ -29,15 +28,6 @@ public class SignInPresenter {
     }
 
     private boolean checkPass(String pass) {
-        boolean check;
-        try {
-            App.clearDbComponent();
-            App.createDbComponent(pass).inject(this);
-            check = realm != null;
-        } catch (RealmFileException e) {
-            e.printStackTrace();
-            check = false;
-        }
-        return check;
+        return dbStore.checkPass(pass);
     }
 }

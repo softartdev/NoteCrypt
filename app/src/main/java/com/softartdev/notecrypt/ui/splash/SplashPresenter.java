@@ -3,13 +3,11 @@ package com.softartdev.notecrypt.ui.splash;
 import android.content.SharedPreferences;
 
 import com.softartdev.notecrypt.App;
+import com.softartdev.notecrypt.db.DbStore;
 
 import java.util.Locale;
 
 import javax.inject.Inject;
-
-import io.realm.Realm;
-import io.realm.exceptions.RealmFileException;
 
 public class SplashPresenter {
     private SplashView mView;
@@ -17,19 +15,16 @@ public class SplashPresenter {
     @Inject
     SharedPreferences sharedPreferences;
 
+    @Inject
+    DbStore dbStore;
+
     SplashPresenter(SplashView view) {
         App.getAppComponent().inject(this);
         mView = view;
     }
 
     private boolean isEncryption() {
-        try {
-            Realm realm = Realm.getDefaultInstance();
-            return realm == null;
-        } catch (RealmFileException e) {
-            e.printStackTrace();
-            return true;
-        }
+        return dbStore.isEncryption();
     }
 
     void checkEncryption() {
