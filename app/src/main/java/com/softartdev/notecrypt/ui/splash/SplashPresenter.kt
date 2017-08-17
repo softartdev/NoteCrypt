@@ -1,13 +1,10 @@
 package com.softartdev.notecrypt.ui.splash
 
 import android.content.SharedPreferences
-
 import com.softartdev.notecrypt.db.DbStore
-import com.softartdev.notecrypt.injection.ConfigPersistent
+import com.softartdev.notecrypt.di.ConfigPersistent
 import com.softartdev.notecrypt.ui.base.BasePresenter
-
-import java.util.Locale
-
+import java.util.*
 import javax.inject.Inject
 
 @ConfigPersistent

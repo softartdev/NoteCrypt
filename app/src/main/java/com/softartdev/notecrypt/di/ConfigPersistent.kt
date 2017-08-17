@@ -1,7 +1,7 @@
-package com.softartdev.notecrypt.injection
+package com.softartdev.notecrypt.di
 
 
-import com.softartdev.notecrypt.injection.component.ConfigPersistentComponent
+import com.softartdev.notecrypt.di.component.ConfigPersistentComponent
 import javax.inject.Scope
 
 /**

@@ -1,7 +1,7 @@
-package com.softartdev.notecrypt.injection.component
+package com.softartdev.notecrypt.di.component
 
-import com.softartdev.notecrypt.injection.PerFragment
-import com.softartdev.notecrypt.injection.module.FragmentModule
+import com.softartdev.notecrypt.di.PerFragment
+import com.softartdev.notecrypt.di.module.FragmentModule
 import dagger.Subcomponent
 
 /**

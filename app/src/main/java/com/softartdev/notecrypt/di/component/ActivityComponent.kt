@@ -1,7 +1,7 @@
-package com.softartdev.notecrypt.injection.component
+package com.softartdev.notecrypt.di.component
 
-import com.softartdev.notecrypt.injection.PerActivity
-import com.softartdev.notecrypt.injection.module.ActivityModule
+import com.softartdev.notecrypt.di.PerActivity
+import com.softartdev.notecrypt.di.module.ActivityModule
 import com.softartdev.notecrypt.ui.base.BaseActivity
 import dagger.Subcomponent
 

@@ -1,12 +1,11 @@
-package com.softartdev.notecrypt.injection.module
+package com.softartdev.notecrypt.di.module
 
 import android.app.Activity
 import android.content.Context
 import android.support.v4.app.Fragment
-
+import com.softartdev.notecrypt.di.ActivityContext
 import dagger.Module
 import dagger.Provides
-import com.softartdev.notecrypt.injection.ActivityContext
 
 @Module
 class FragmentModule(private val mFragment: Fragment) {

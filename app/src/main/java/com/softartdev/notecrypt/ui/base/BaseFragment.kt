@@ -1,9 +1,5 @@
 package com.softartdev.notecrypt.ui.base
 
-import com.softartdev.notecrypt.injection.component.ConfigPersistentComponent
-import com.softartdev.notecrypt.injection.component.DaggerConfigPersistentComponent
-import com.softartdev.notecrypt.injection.component.FragmentComponent
-import com.softartdev.notecrypt.injection.module.FragmentModule
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.util.LongSparseArray
@@ -11,6 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.softartdev.notecrypt.App
+import com.softartdev.notecrypt.di.component.ConfigPersistentComponent
+import com.softartdev.notecrypt.di.component.DaggerConfigPersistentComponent
+import com.softartdev.notecrypt.di.component.FragmentComponent
+import com.softartdev.notecrypt.di.module.FragmentModule
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicLong
 

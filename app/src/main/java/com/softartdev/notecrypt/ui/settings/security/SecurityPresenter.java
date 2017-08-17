@@ -2,9 +2,8 @@ package com.softartdev.notecrypt.ui.settings.security;
 
 import android.text.TextUtils;
 
-import com.softartdev.notecrypt.App;
 import com.softartdev.notecrypt.db.DbStore;
-import com.softartdev.notecrypt.injection.ConfigPersistent;
+import com.softartdev.notecrypt.di.ConfigPersistent;
 import com.softartdev.notecrypt.ui.base.BasePresenter;
 
 import org.jetbrains.annotations.NotNull;

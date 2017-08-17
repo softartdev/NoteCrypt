@@ -3,13 +3,10 @@ package com.softartdev.notecrypt.ui.splash
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-
 import com.softartdev.notecrypt.ui.base.BaseActivity
 import com.softartdev.notecrypt.ui.main.MainActivity
 import com.softartdev.notecrypt.ui.signin.SignInActivity
-
-import java.util.Locale
-
+import java.util.*
 import javax.inject.Inject
 
 class SplashActivity : BaseActivity(), SplashView {

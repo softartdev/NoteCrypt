@@ -1,4 +1,4 @@
-package com.softartdev.notecrypt.injection
+package com.softartdev.notecrypt.di
 
 import javax.inject.Scope
 

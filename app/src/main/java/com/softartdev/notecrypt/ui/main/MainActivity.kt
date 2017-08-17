@@ -8,17 +8,13 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.TextView
-
 import com.softartdev.notecrypt.R
 import com.softartdev.notecrypt.model.Note
+import com.softartdev.notecrypt.model.Note.NOTE_ID
 import com.softartdev.notecrypt.ui.base.BaseActivity
 import com.softartdev.notecrypt.ui.note.NoteActivity
-
-import javax.inject.Inject
-
 import io.realm.RealmResults
-
-import com.softartdev.notecrypt.model.Note.NOTE_ID
+import javax.inject.Inject
 
 class MainActivity : BaseActivity(), MainView, View.OnClickListener {
     @Inject lateinit var mPresenter: MainPresenter

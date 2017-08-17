@@ -1,8 +1,8 @@
-package com.softartdev.notecrypt.injection.component
+package com.softartdev.notecrypt.di.component
 
-import com.softartdev.notecrypt.injection.ConfigPersistent
-import com.softartdev.notecrypt.injection.module.ActivityModule
-import com.softartdev.notecrypt.injection.module.FragmentModule
+import com.softartdev.notecrypt.di.ConfigPersistent
+import com.softartdev.notecrypt.di.module.ActivityModule
+import com.softartdev.notecrypt.di.module.FragmentModule
 import com.softartdev.notecrypt.ui.base.BaseActivity
 import com.softartdev.notecrypt.ui.base.BaseFragment
 import dagger.Component

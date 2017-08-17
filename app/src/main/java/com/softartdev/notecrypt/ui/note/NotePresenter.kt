@@ -2,7 +2,7 @@ package com.softartdev.notecrypt.ui.note
 
 import android.text.TextUtils
 import com.softartdev.notecrypt.db.DbStore
-import com.softartdev.notecrypt.injection.ConfigPersistent
+import com.softartdev.notecrypt.di.ConfigPersistent
 import com.softartdev.notecrypt.model.Note
 import com.softartdev.notecrypt.ui.base.BasePresenter
 import javax.inject.Inject

@@ -1,10 +1,6 @@
 package com.softartdev.notecrypt.ui.base
 
 import android.content.Intent
-import com.softartdev.notecrypt.injection.component.ActivityComponent
-import com.softartdev.notecrypt.injection.component.ConfigPersistentComponent
-import com.softartdev.notecrypt.injection.component.DaggerConfigPersistentComponent
-import com.softartdev.notecrypt.injection.module.ActivityModule
 import android.os.Bundle
 import android.support.v4.util.LongSparseArray
 import android.support.v7.app.AppCompatActivity
@@ -12,6 +8,10 @@ import android.view.Menu
 import android.view.MenuItem
 import com.softartdev.notecrypt.App
 import com.softartdev.notecrypt.R
+import com.softartdev.notecrypt.di.component.ActivityComponent
+import com.softartdev.notecrypt.di.component.ConfigPersistentComponent
+import com.softartdev.notecrypt.di.component.DaggerConfigPersistentComponent
+import com.softartdev.notecrypt.di.module.ActivityModule
 import com.softartdev.notecrypt.ui.settings.SettingsActivity
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicLong

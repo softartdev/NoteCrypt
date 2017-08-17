@@ -1,7 +1,7 @@
 package com.softartdev.notecrypt.ui.main
 
 import com.softartdev.notecrypt.db.DbStore
-import com.softartdev.notecrypt.injection.ConfigPersistent
+import com.softartdev.notecrypt.di.ConfigPersistent
 import com.softartdev.notecrypt.ui.base.BasePresenter
 import javax.inject.Inject
 

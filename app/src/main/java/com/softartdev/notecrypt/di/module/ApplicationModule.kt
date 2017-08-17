@@ -1,4 +1,4 @@
-package com.softartdev.notecrypt.injection.module
+package com.softartdev.notecrypt.di.module
 
 import android.app.Application
 import android.content.Context
@@ -6,12 +6,10 @@ import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import com.softartdev.notecrypt.db.DbStore
 import com.softartdev.notecrypt.db.RealmDbStore
-
-import javax.inject.Singleton
-
+import com.softartdev.notecrypt.di.ApplicationContext
 import dagger.Module
 import dagger.Provides
-import com.softartdev.notecrypt.injection.ApplicationContext
+import javax.inject.Singleton
 
 @Module
 class ApplicationModule(private val mApplication: Application) {

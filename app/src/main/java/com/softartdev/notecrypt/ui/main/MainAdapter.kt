@@ -6,14 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-
 import com.softartdev.notecrypt.R
-import com.softartdev.notecrypt.injection.ConfigPersistent
+import com.softartdev.notecrypt.di.ConfigPersistent
 import com.softartdev.notecrypt.model.Note
-
-import javax.inject.Inject
-
 import io.realm.RealmResults
+import javax.inject.Inject
 
 @ConfigPersistent
 class MainAdapter @Inject

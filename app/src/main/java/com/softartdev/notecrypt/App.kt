@@ -4,9 +4,9 @@ import android.app.Application
 import android.content.Context
 import com.facebook.stetho.Stetho
 
-import com.softartdev.notecrypt.injection.component.ApplicationComponent
-import com.softartdev.notecrypt.injection.component.DaggerApplicationComponent
-import com.softartdev.notecrypt.injection.module.ApplicationModule
+import com.softartdev.notecrypt.di.component.ApplicationComponent
+import com.softartdev.notecrypt.di.component.DaggerApplicationComponent
+import com.softartdev.notecrypt.di.module.ApplicationModule
 import com.squareup.leakcanary.LeakCanary
 import timber.log.Timber
 
