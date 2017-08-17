@@ -22,7 +22,7 @@ class MainActivity : BaseActivity(), MainView, View.OnClickListener {
 
     internal var addNoteTextView: TextView? = null
     internal var notesRecyclerView: RecyclerView? = null
-    internal var onNoteIntent: Intent = Intent(this, NoteActivity::class.java)
+    internal lateinit var onNoteIntent: Intent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +44,8 @@ class MainActivity : BaseActivity(), MainView, View.OnClickListener {
         if (mAdapter.itemCount == 0) {
             mPresenter.updateNotes()
         }
+
+        onNoteIntent = Intent(this, NoteActivity::class.java)
     }
 
     override fun onUpdateNotes(notes: RealmResults<Note>) {

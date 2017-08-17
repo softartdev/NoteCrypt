@@ -50,7 +50,7 @@ abstract class BaseActivity : AppCompatActivity() {
         mActivityComponent?.inject(this)
 
         //TODO: remove
-        SettingsActivity.theme(this)
+//        SettingsActivity.theme(this)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

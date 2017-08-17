@@ -3,7 +3,6 @@ package com.softartdev.notecrypt
 import android.app.Application
 import android.content.Context
 import com.facebook.stetho.Stetho
-
 import com.softartdev.notecrypt.di.component.ApplicationComponent
 import com.softartdev.notecrypt.di.component.DaggerApplicationComponent
 import com.softartdev.notecrypt.di.module.ApplicationModule

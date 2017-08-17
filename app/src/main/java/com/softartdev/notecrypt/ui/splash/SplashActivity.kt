@@ -16,6 +16,7 @@ class SplashActivity : BaseActivity(), SplashView {
         super.onCreate(savedInstanceState)
         activityComponent().inject(this)
         mPresenter.attachView(this)
+
         mPresenter.setLocale()
         mPresenter.checkEncryption()
     }
