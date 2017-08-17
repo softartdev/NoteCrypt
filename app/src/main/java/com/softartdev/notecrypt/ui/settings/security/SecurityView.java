@@ -1,6 +1,8 @@
 package com.softartdev.notecrypt.ui.settings.security;
 
-interface SecurityView {
+import com.softartdev.notecrypt.ui.base.MvpView;
+
+interface SecurityView extends MvpView {
     void showEncryptEnable(boolean encryption);
     void showPasswordDialog();
     void showSetPasswordDialog();

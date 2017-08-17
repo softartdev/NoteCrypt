@@ -3,14 +3,14 @@ package com.softartdev.notecrypt
 import android.app.Application
 import android.content.Context
 import com.facebook.stetho.Stetho
-import com.squareup.leakcanary.LeakCanary
+
 import com.softartdev.notecrypt.injection.component.ApplicationComponent
-import com.softartdev.notecrypt.di.component.DaggerAppComponent
 import com.softartdev.notecrypt.injection.component.DaggerApplicationComponent
 import com.softartdev.notecrypt.injection.module.ApplicationModule
+import com.squareup.leakcanary.LeakCanary
 import timber.log.Timber
 
-class MvpStarterApplication : Application() {
+class App : Application() {
 
     internal var mApplicationComponent: ApplicationComponent? = null
 
@@ -28,7 +28,7 @@ class MvpStarterApplication : Application() {
     var component: ApplicationComponent
         get() {
             if (mApplicationComponent == null) {
-                mApplicationComponent = DaggerAppComponent.builder()
+                mApplicationComponent = DaggerApplicationComponent.builder()
                         .applicationModule(ApplicationModule(this))
                         .build()
             }
@@ -40,8 +40,8 @@ class MvpStarterApplication : Application() {
 
     companion object {
 
-        operator fun get(context: Context): MvpStarterApplication {
-            return context.applicationContext as MvpStarterApplication
+        operator fun get(context: Context): App {
+            return context.applicationContext as App
         }
     }
 }

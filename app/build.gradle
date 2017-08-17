@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'realm-android'
 
 def support_version = "26.0.1"
-def dagger_version = "2.10"
+def dagger_version = "2.8"
 
 android {
     compileSdkVersion 26
@@ -50,7 +50,7 @@ dependencies {
 
     implementation "com.google.dagger:dagger:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
-    compileOnly "javax.annotation:jsr250-api:1.0"
+    compileOnly 'org.glassfish:javax.annotation:10.0-b28' //Required by Dagger2
 
     debugImplementation ('com.github.jonasrottmann.realm-browser:realm-browser:0.0.13') {
         exclude group: 'com.android.support'

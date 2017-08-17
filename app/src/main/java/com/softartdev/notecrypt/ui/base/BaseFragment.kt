@@ -1,6 +1,5 @@
 package com.softartdev.notecrypt.ui.base
 
-import com.softartdev.notecrypt.MvpStarterApplication
 import com.softartdev.notecrypt.injection.component.ConfigPersistentComponent
 import com.softartdev.notecrypt.injection.component.DaggerConfigPersistentComponent
 import com.softartdev.notecrypt.injection.component.FragmentComponent
@@ -11,7 +10,7 @@ import android.support.v4.util.LongSparseArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import butterknife.ButterKnife
+import com.softartdev.notecrypt.App
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicLong
 
@@ -35,7 +34,7 @@ abstract class BaseFragment : Fragment() {
         if (sComponentsArray.get(mFragmentId) == null) {
             Timber.i("Creating new ConfigPersistentComponent id=%d", mFragmentId)
             configPersistentComponent = DaggerConfigPersistentComponent.builder()
-                    .applicationComponent(MvpStarterApplication[activity].component)
+                    .applicationComponent(App[activity].component)
                     .build()
             sComponentsArray.put(mFragmentId, configPersistentComponent)
         } else {
@@ -48,7 +47,6 @@ abstract class BaseFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view: View? = inflater?.inflate(layout, container, false)
-        ButterKnife.bind(this, view as View)
         return view
     }
 

@@ -1,6 +1,6 @@
 package com.softartdev.notecrypt.ui.base
 
-import com.softartdev.notecrypt.MvpStarterApplication
+import android.content.Intent
 import com.softartdev.notecrypt.injection.component.ActivityComponent
 import com.softartdev.notecrypt.injection.component.ConfigPersistentComponent
 import com.softartdev.notecrypt.injection.component.DaggerConfigPersistentComponent
@@ -8,8 +8,11 @@ import com.softartdev.notecrypt.injection.module.ActivityModule
 import android.os.Bundle
 import android.support.v4.util.LongSparseArray
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
 import android.view.MenuItem
-import butterknife.ButterKnife
+import com.softartdev.notecrypt.App
+import com.softartdev.notecrypt.R
+import com.softartdev.notecrypt.ui.settings.SettingsActivity
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicLong
 
@@ -29,8 +32,6 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(layout)
-        ButterKnife.bind(this)
         // Create the ActivityComponent and reuses cached ConfigPersistentComponent if this is
         // being called after a configuration change.
         mActivityId = savedInstanceState?.getLong(KEY_ACTIVITY_ID) ?: NEXT_ID.getAndIncrement()
@@ -38,7 +39,7 @@ abstract class BaseActivity : AppCompatActivity() {
         if (sComponentsArray.get(mActivityId) == null) {
             Timber.i("Creating new ConfigPersistentComponent id=%d", mActivityId)
             configPersistentComponent = DaggerConfigPersistentComponent.builder()
-                    .applicationComponent(MvpStarterApplication[this].component)
+                    .applicationComponent(App[this].component)
                     .build()
             sComponentsArray.put(mActivityId, configPersistentComponent)
         } else {
@@ -47,9 +48,10 @@ abstract class BaseActivity : AppCompatActivity() {
         }
         mActivityComponent = configPersistentComponent.activityComponent(ActivityModule(this))
         mActivityComponent?.inject(this)
-    }
 
-    abstract val layout: Int
+        //TODO: remove
+        SettingsActivity.theme(this)
+    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -64,10 +66,19 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
                 finish()
+                return true
+            }
+            R.id.action_settings -> {
+                startActivity(Intent(this, SettingsActivity::class.java))
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
