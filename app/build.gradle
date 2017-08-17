@@ -1,16 +1,18 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'realm-android'
 
-def support_version = "25.3.1"
+def support_version = "26.0.1"
 def dagger_version = "2.10"
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion "25.0.3"
     defaultConfig {
         applicationId "com.softartdev.notecrypt"
         minSdkVersion 15
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 2
         versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -22,34 +24,39 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile "com.android.support:support-v4:$support_version"
-    compile "com.android.support:appcompat-v7:$support_version"
-    compile "com.android.support:design:$support_version"
-    compile "com.android.support:recyclerview-v7:$support_version"
-    compile "com.android.support:cardview-v7:$support_version"
-    compile "com.android.support:support-vector-drawable:$support_version"
-    compile "com.android.support.constraint:constraint-layout:1.0.2"
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "com.android.support:support-v4:$support_version"
+    implementation "com.android.support:appcompat-v7:$support_version"
+    implementation "com.android.support:design:$support_version"
+    implementation "com.android.support:recyclerview-v7:$support_version"
+    implementation "com.android.support:cardview-v7:$support_version"
+    implementation "com.android.support:support-vector-drawable:$support_version"
+    implementation "com.android.support.constraint:constraint-layout:1.0.2"
 
-    compile "com.google.dagger:dagger:$dagger_version"
-    annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
-    provided "javax.annotation:jsr250-api:1.0"
+    implementation "com.google.dagger:dagger:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    compileOnly "javax.annotation:jsr250-api:1.0"
 
-    debugCompile ('com.github.jonasrottmann.realm-browser:realm-browser:0.0.13') {
-        exclude group: 'com.android.support';
+    debugImplementation ('com.github.jonasrottmann.realm-browser:realm-browser:0.0.13') {
+        exclude group: 'com.android.support'
     }
 //    testCompile 'com.github.jonasrottmann.realm-browser:realm-browser-no-op:0.0.13'
 //    releaseCompile 'com.github.jonasrottmann.realm-browser:realm-browser-no-op:0.0.13'
 
-    testCompile "junit:junit:4.12"
+    testImplementation "junit:junit:4.12"
 
-    androidTestCompile("com.android.support.test.espresso:espresso-core:2.2.2", {
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:2.2.2", {
         exclude group: "com.android.support", module: "support-annotations"
     })
-    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2.2', {
+    androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.android.support', module: 'support-v4'
         exclude group: 'com.android.support', module: 'design'
