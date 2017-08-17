@@ -1,8 +1,8 @@
 package com.softartdev.notecrypt.ui.note;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
@@ -14,12 +14,16 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.softartdev.notecrypt.R;
-import com.softartdev.notecrypt.ui.BaseActivity;
+import com.softartdev.notecrypt.ui.base.BaseActivity;
+
+import javax.inject.Inject;
 
 import static com.softartdev.notecrypt.model.Note.NOTE_ID;
 
 public class NoteActivity extends BaseActivity implements NoteView, View.OnClickListener {
+    @Inject
     NotePresenter mPresenter;
+
     FloatingActionButton saveNoteFab;
     EditText noteEditText, titleEditText;
 
@@ -27,17 +31,18 @@ public class NoteActivity extends BaseActivity implements NoteView, View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
-        mPresenter = new NotePresenter(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        activityComponent().inject(this);
+        mPresenter.attachView(this);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        saveNoteFab = (FloatingActionButton) findViewById(R.id.save_note_fab);
+        saveNoteFab = findViewById(R.id.save_note_fab);
         saveNoteFab.setOnClickListener(this);
-        noteEditText = (EditText) findViewById(R.id.note_edit_text);
-        titleEditText = (EditText) findViewById(R.id.note_title_edit_text);
+        noteEditText = findViewById(R.id.note_edit_text);
+        titleEditText = findViewById(R.id.note_title_edit_text);
 
         Intent intent = getIntent();
         long noteId = intent.getLongExtra(NOTE_ID, 0L);
@@ -49,7 +54,7 @@ public class NoteActivity extends BaseActivity implements NoteView, View.OnClick
     }
 
     @Override
-    public void onLoadNote(String title, String text) {
+    public void onLoadNote(@NonNull String title, @NonNull String text) {
         titleEditText.setText(title);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(title);
@@ -58,7 +63,7 @@ public class NoteActivity extends BaseActivity implements NoteView, View.OnClick
     }
 
     @Override
-    public void onSaveNote(String title) {
+    public void onSaveNote(@NonNull String title) {
         String noteSaved = getString(R.string.note_saved) + ": " + title;
         Snackbar.make(saveNoteFab, noteSaved, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
@@ -84,13 +89,13 @@ public class NoteActivity extends BaseActivity implements NoteView, View.OnClick
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         getMenuInflater().inflate(R.menu.menu_note, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 checkSaveChange();
@@ -116,18 +121,8 @@ public class NoteActivity extends BaseActivity implements NoteView, View.OnClick
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.action_delete_note)
                 .setMessage(R.string.note_delete_dialog_message)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mPresenter.deleteNote();
-                    }
-                })
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
+                .setPositiveButton(android.R.string.yes, (dialog, which) -> mPresenter.deleteNote())
+                .setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.cancel());
         AlertDialog dialog = builder.create();
         dialog.show();
     }
@@ -137,25 +132,12 @@ public class NoteActivity extends BaseActivity implements NoteView, View.OnClick
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.note_changes_not_saved_dialog_title)
                 .setMessage(R.string.note_save_change_dialog_message)
-                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mPresenter.saveNote(titleEditText.getText().toString(), noteEditText.getText().toString());
-                        onNavBack();
-                    }
+                .setPositiveButton(R.string.yes, (dialog, which) -> {
+                    mPresenter.saveNote(titleEditText.getText().toString(), noteEditText.getText().toString());
+                    onNavBack();
                 })
-                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        onNavBack();
-                    }
-                })
-                .setNeutralButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
+                .setNegativeButton(R.string.no, (dialog, which) -> onNavBack())
+                .setNeutralButton(android.R.string.cancel, (dialog, which) -> dialog.cancel());
         AlertDialog dialog = builder.create();
         dialog.show();
     }
@@ -163,5 +145,11 @@ public class NoteActivity extends BaseActivity implements NoteView, View.OnClick
     @Override
     public void onNavBack() {
         NavUtils.navigateUpFromSameTask(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        mPresenter.detachView();
+        super.onDestroy();
     }
 }

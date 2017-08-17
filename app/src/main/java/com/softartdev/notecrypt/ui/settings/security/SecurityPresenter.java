@@ -2,20 +2,26 @@ package com.softartdev.notecrypt.ui.settings.security;
 
 import android.text.TextUtils;
 
-import com.softartdev.notecrypt.App;
 import com.softartdev.notecrypt.db.DbStore;
+import com.softartdev.notecrypt.di.ConfigPersistent;
+import com.softartdev.notecrypt.ui.base.BasePresenter;
+
+import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 
-public class SecurityPresenter {
-    private SecurityView mView;
+@ConfigPersistent
+class SecurityPresenter extends BasePresenter<SecurityView> {
+    private DbStore dbStore;
 
     @Inject
-    DbStore dbStore;
+    SecurityPresenter(DbStore dbStore) {
+        this.dbStore = dbStore;
+    }
 
-    SecurityPresenter(SecurityView view) {
-        App.getAppComponent().inject(this);
-        mView = view;
+    @Override
+    public void attachView(@NotNull SecurityView mvpView) {
+        super.attachView(mvpView);
     }
 
     boolean isEncryption() {
@@ -32,21 +38,21 @@ public class SecurityPresenter {
 
     void changeEncryption(boolean checked) {
         if (checked) {
-            mView.showSetPasswordDialog();
+            getMvpView().showSetPasswordDialog();
         } else {
             if (isEncryption()) {
-                mView.showPasswordDialog();
+                getMvpView().showPasswordDialog();
             } else {
-                mView.showEncryptEnable(false);
+                getMvpView().showEncryptEnable(false);
             }
         }
     }
 
     void changePassword() {
         if (isEncryption()) {
-            mView.showChangePasswordDialog();
+            getMvpView().showChangePasswordDialog();
         } else {
-            mView.showSetPasswordDialog();
+            getMvpView().showSetPasswordDialog();
         }
     }
 
@@ -57,14 +63,14 @@ public class SecurityPresenter {
         String password = pass.getTextString();
         if (TextUtils.isEmpty(password)) {
             pass.showEmptyPasswordError();
-            mView.showEncryptEnable(true);
+            getMvpView().showEncryptEnable(true);
         } else if (checkPass(password)) {
             changePassword(password, null);
-            mView.showEncryptEnable(false);
+            getMvpView().showEncryptEnable(false);
             return true;
         } else {
             pass.showIncorrectPasswordError();
-            mView.showEncryptEnable(true);
+            getMvpView().showEncryptEnable(true);
         }
 
         return false;
@@ -82,7 +88,7 @@ public class SecurityPresenter {
                 pass.showEmptyPasswordError();
             } else {
                 changePassword(null, password);
-                mView.showEncryptEnable(true);
+                getMvpView().showEncryptEnable(true);
                 return true;
             }
         } else {
