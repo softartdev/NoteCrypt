@@ -10,7 +10,7 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 import timber.log.Timber;
 
-public class RealmDbStore extends RealmDbStoreProvider {
+public class RealmDbStore extends RealmDbRepository {
 
     public RealmDbStore(Context context) {
         super(context);

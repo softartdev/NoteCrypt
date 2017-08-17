@@ -8,11 +8,12 @@ import java.io.File;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.exceptions.RealmFileException;
+import timber.log.Timber;
 
-abstract class RealmDbStoreProvider implements DbStore {
+abstract class RealmDbRepository implements DbStore {
     private Realm mRealm;
 
-    RealmDbStoreProvider(Context context) {
+    RealmDbRepository(Context context) {
         Realm.init(context);
     }
 
@@ -54,6 +55,10 @@ abstract class RealmDbStoreProvider implements DbStore {
         byte[] newKey = getSecureKey(newPass);
 
         String oldName = mRealm.getConfiguration().getRealmFileName();
+        if (mRealm != null) {
+            mRealm.close();
+            mRealm = null;
+        }
         String newName = getNextName(oldName);
 
         RealmConfiguration.Builder oldBuilder = new RealmConfiguration.Builder();
@@ -64,9 +69,13 @@ abstract class RealmDbStoreProvider implements DbStore {
         RealmConfiguration oldConfig = oldBuilder.build();
 
         Realm oldRealm = Realm.getInstance(oldConfig);
-        File file = new File(oldConfig.getRealmDirectory(), newName);
-        oldRealm.writeEncryptedCopyTo(file, newKey);
+        File newFile = new File(oldConfig.getRealmDirectory(), newName);
+        File oldFile = new File(oldConfig.getRealmDirectory(), oldName);
+        oldRealm.writeEncryptedCopyTo(newFile, newKey);
         oldRealm.close();
+        if (oldFile.delete()) {
+            Timber.d("%s deleted", oldFile.getName());
+        }
 
         RealmConfiguration newConfig = new RealmConfiguration.Builder()
                 .name(newName)
@@ -87,7 +96,9 @@ abstract class RealmDbStoreProvider implements DbStore {
     }
 
     private String getNextName(String oldName) {
-        String oldVerString = oldName.replaceAll("\\D+","");
+        String prefix = "default";
+        String extension = ".realm";
+        String oldVerString = oldName.replace(prefix,"").replace(extension, ""); // default[ver].realm -> [ver]
         int newVer, oldVer;
         if (TextUtils.isEmpty(oldVerString)) {
             oldVer = 0;
@@ -96,6 +107,8 @@ abstract class RealmDbStoreProvider implements DbStore {
         }
         newVer = oldVer + 1;
         String newVerString = String.valueOf(newVer);
-        return oldVerString.replace(oldVerString, newVerString);
+        String newName = prefix.concat(newVerString).concat(extension);
+        Timber.d("New file name: %s", newName);
+        return newName;
     }
 }
