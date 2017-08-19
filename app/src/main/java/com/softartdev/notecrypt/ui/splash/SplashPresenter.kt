@@ -15,11 +15,8 @@ constructor(private val preferencesHelper: PreferencesHelper, private val dbStor
         super.attachView(mvpView)
     }
 
-    private val isEncryption: Boolean
-        get() = dbStore.isEncryption
-
     fun checkEncryption() {
-        if (isEncryption) {
+        if (dbStore.isEncryption) {
             mvpView!!.navSignIn()
         } else {
             mvpView!!.navMain()

@@ -8,6 +8,8 @@ import java.io.File;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.exceptions.RealmFileException;
+import io.realm.rx.RealmObservableFactory;
+import io.realm.rx.RxObservableFactory;
 import timber.log.Timber;
 
 abstract class RealmDbRepository implements DbStore {
@@ -23,13 +25,7 @@ abstract class RealmDbRepository implements DbStore {
 
     @Override
     public boolean isEncryption() {
-        try {
-            mRealm = Realm.getDefaultInstance();
-            return mRealm == null;
-        } catch (RealmFileException e) {
-            e.printStackTrace();
-            return true;
-        }
+        return !checkPass(null);
     }
 
     @Override
@@ -40,8 +36,7 @@ abstract class RealmDbRepository implements DbStore {
                 builder.encryptionKey(getSecureKey(password));
             }
             RealmConfiguration realmConfiguration = builder.build();
-            Realm.setDefaultConfiguration(realmConfiguration);
-            mRealm = Realm.getDefaultInstance();
+            mRealm = Realm.getInstance(realmConfiguration);
             return true;
         } catch (RealmFileException e) {
             e.printStackTrace();
@@ -69,12 +64,12 @@ abstract class RealmDbRepository implements DbStore {
         RealmConfiguration oldConfig = oldBuilder.build();
 
         Realm oldRealm = Realm.getInstance(oldConfig);
-        File newFile = new File(oldConfig.getRealmDirectory(), newName);
-        File oldFile = new File(oldConfig.getRealmDirectory(), oldName);
-        oldRealm.writeEncryptedCopyTo(newFile, newKey);
+
+        File dir = oldConfig.getRealmDirectory();
+        oldRealm.writeEncryptedCopyTo(new File(dir, newName), newKey);
         oldRealm.close();
-        if (oldFile.delete()) {
-            Timber.d("%s deleted", oldFile.getName());
+        if (Realm.deleteRealm(oldConfig)) {
+            Timber.d("%s deleted", oldName);
         }
 
         RealmConfiguration newConfig = new RealmConfiguration.Builder()

@@ -3,6 +3,7 @@ package com.softartdev.notecrypt.ui.settings.security;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
@@ -68,7 +69,7 @@ public class SecurityActivity extends BaseActivity implements SecurityView, View
         LayoutInflater inflater = getLayoutInflater();
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.dialog_password, null);
         final TextInputLayout enterPassTextInputLayout = view.findViewById(R.id.enter_password_text_input_layout);
-        final EditText enterPassEditText = view.findViewById(R.id.enter_password_edit_text);
+        final TextInputEditText enterPassEditText = view.findViewById(R.id.enter_password_edit_text);
         builder.setView(view)
                 .setPositiveButton(android.R.string.ok, null)
                 .setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.cancel());
@@ -91,13 +92,13 @@ public class SecurityActivity extends BaseActivity implements SecurityView, View
         LayoutInflater inflater = getLayoutInflater();
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.dialog_set_password, null);
         final TextInputLayout setPassTextInputLayout = view.findViewById(R.id.set_password_text_input_layout);
-        final EditText setPassEditText = view.findViewById(R.id.set_password_edit_text);
+        final TextInputEditText setPassEditText = view.findViewById(R.id.set_password_edit_text);
         final TextInputLayout repeatSetPassTextInputLayout = view.findViewById(R.id.repeat_set_password_text_input_layout);
-        final EditText repeatSetPassEditText = view.findViewById(R.id.repeat_set_password_edit_text);
+        final TextInputEditText repeatSetPassEditText = view.findViewById(R.id.repeat_set_password_edit_text);
         builder.setView(view)
                 .setPositiveButton(android.R.string.ok, null)
                 .setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.cancel());
-        final AlertDialog alertDialog = builder.create();
+        final AlertDialog alertDialog = builder.create(); //TODO: try to make it global for move positive button listener above
         alertDialog.setOnShowListener(dialog -> {
             Button okButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
             okButton.setOnClickListener(v -> {
@@ -117,11 +118,11 @@ public class SecurityActivity extends BaseActivity implements SecurityView, View
         LayoutInflater inflater = getLayoutInflater();
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.dialog_change_password, null);
         final TextInputLayout oldPassTextInputLayout = view.findViewById(R.id.old_password_text_input_layout);
-        final EditText oldPassEditText = view.findViewById(R.id.old_password_edit_text);
+        final TextInputEditText oldPassEditText = view.findViewById(R.id.old_password_edit_text);
         final TextInputLayout newPassTextInputLayout = view.findViewById(R.id.new_password_text_input_layout);
-        final EditText newPassEditText = view.findViewById(R.id.new_password_edit_text);
+        final TextInputEditText newPassEditText = view.findViewById(R.id.new_password_edit_text);
         final TextInputLayout repeatPassTextInputLayout = view.findViewById(R.id.repeat_new_password_text_input_layout);
-        final EditText repeatNewPassEditText = view.findViewById(R.id.repeat_new_password_edit_text);
+        final TextInputEditText repeatNewPassEditText = view.findViewById(R.id.repeat_new_password_edit_text);
         builder.setView(view)
                 .setPositiveButton(android.R.string.ok, null)
                 .setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.cancel());
