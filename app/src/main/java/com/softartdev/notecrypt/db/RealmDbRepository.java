@@ -8,8 +8,6 @@ import java.io.File;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.exceptions.RealmFileException;
-import io.realm.rx.RealmObservableFactory;
-import io.realm.rx.RxObservableFactory;
 import timber.log.Timber;
 
 abstract class RealmDbRepository implements DbStore {

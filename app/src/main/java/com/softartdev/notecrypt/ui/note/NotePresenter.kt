@@ -1,15 +1,16 @@
 package com.softartdev.notecrypt.ui.note
 
 import android.text.TextUtils
-import com.softartdev.notecrypt.db.DbStore
+import com.softartdev.notecrypt.data.DataManager
 import com.softartdev.notecrypt.di.ConfigPersistent
 import com.softartdev.notecrypt.model.Note
 import com.softartdev.notecrypt.ui.base.BasePresenter
+import timber.log.Timber
 import javax.inject.Inject
 
 @ConfigPersistent
 internal class NotePresenter @Inject
-constructor(private val dbStore: DbStore) : BasePresenter<NoteView>() {
+constructor(private val dataManager: DataManager) : BasePresenter<NoteView>() {
     private var mNote: Note? = null
 
     override fun attachView(mvpView: NoteView) {
@@ -17,7 +18,10 @@ constructor(private val dbStore: DbStore) : BasePresenter<NoteView>() {
     }
 
     fun createNote() {
-        mNote = dbStore.createNote()
+        addDisposable(dataManager.createNote()
+                .subscribe({note ->
+                    mNote = note
+                }, {it.printStackTrace() }))
     }
 
     fun saveNote(title: String, text: String) {
@@ -28,19 +32,27 @@ constructor(private val dbStore: DbStore) : BasePresenter<NoteView>() {
         if (TextUtils.isEmpty(title) && TextUtils.isEmpty(text)) {
             mvpView!!.onEmptyNote()
         } else {
-            dbStore.saveNote(mNote!!.id, title, text)
-            mvpView!!.onSaveNote(title)
+            addDisposable(dataManager.saveNote(mNote!!.id, title, text)
+                    .subscribe(
+                            { mvpView!!.onSaveNote(title) },
+                            { it.printStackTrace() }))
         }
     }
 
     fun loadNote(noteId: Long) {
-        mNote = dbStore.loadNote(noteId)
-        mvpView!!.onLoadNote(mNote!!.title, mNote!!.text)
+        addDisposable(dataManager.loadNote(noteId)
+                .subscribe({note ->
+                            mNote = note
+                            mvpView!!.onLoadNote(mNote!!.title, mNote!!.text)
+                }, { it.printStackTrace() }))
     }
 
     fun deleteNote() {
         if (mNote != null) {
-            dbStore.deleteNote(mNote!!.id)
+            addDisposable(dataManager.deleteNote(mNote!!.id)
+                    .subscribe(
+                            { Timber.d("Note deleted") }
+                            , { it.printStackTrace() }))
         }
         mNote = null
         mvpView!!.onDeleteNote()

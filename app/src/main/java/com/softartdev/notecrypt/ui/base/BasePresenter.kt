@@ -1,7 +1,7 @@
 package com.softartdev.notecrypt.ui.base
 
-//import rx.Subscription
-//import rx.subscriptions.CompositeSubscription
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 
 /**
  * Base class that implements the Presenter interface and provides a base implementation for
@@ -12,7 +12,7 @@ open class BasePresenter<T : MvpView> : Presenter<T> {
 
     var mvpView: T? = null
         private set
-//    private val mCompositeSubscription = CompositeSubscription()
+    private val mCompositeDisposable = CompositeDisposable()
 
     override fun attachView(mvpView: T) {
         this.mvpView = mvpView
@@ -20,9 +20,9 @@ open class BasePresenter<T : MvpView> : Presenter<T> {
 
     override fun detachView() {
         mvpView = null
-        /*if (!mCompositeSubscription.isUnsubscribed) {
-            mCompositeSubscription.clear()
-        }*/
+        if (!mCompositeDisposable.isDisposed) {
+            mCompositeDisposable.clear()
+        }
     }
 
     val isViewAttached: Boolean
@@ -31,11 +31,11 @@ open class BasePresenter<T : MvpView> : Presenter<T> {
     fun checkViewAttached() {
         if (!isViewAttached) throw MvpViewNotAttachedException()
     }
-/*
-    fun addSubscription(subs: Subscription) {
-        mCompositeSubscription.add(subs)
+
+    fun addDisposable(disposable: Disposable) {
+        mCompositeDisposable.add(disposable)
     }
-*/
+
     private class MvpViewNotAttachedException internal constructor() : RuntimeException("Please call Presenter.attachView(MvpView) before" + " requesting data to the Presenter")
 
 }

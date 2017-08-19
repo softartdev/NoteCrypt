@@ -1,6 +1,6 @@
 package com.softartdev.notecrypt.ui.splash
 
-import com.softartdev.notecrypt.db.DbStore
+import com.softartdev.notecrypt.data.DataManager
 import com.softartdev.notecrypt.di.ConfigPersistent
 import com.softartdev.notecrypt.ui.base.BasePresenter
 import com.softartdev.notecrypt.util.PreferencesHelper
@@ -9,14 +9,15 @@ import javax.inject.Inject
 
 @ConfigPersistent
 class SplashPresenter @Inject
-constructor(private val preferencesHelper: PreferencesHelper, private val dbStore: DbStore) : BasePresenter<SplashView>() {
+constructor(private val preferencesHelper: PreferencesHelper, private val dataManager: DataManager) : BasePresenter<SplashView>() {
 
     override fun attachView(mvpView: SplashView) {
         super.attachView(mvpView)
     }
 
     fun checkEncryption() {
-        if (dbStore.isEncryption) {
+        checkViewAttached()
+        if (dataManager.isEncryption()) {
             mvpView!!.navSignIn()
         } else {
             mvpView!!.navMain()
