@@ -1,14 +1,13 @@
 package com.softartdev.notecrypt.ui.signin
 
-import com.softartdev.notecrypt.db.DbStore
+import com.softartdev.notecrypt.data.DataManager
 import com.softartdev.notecrypt.di.ConfigPersistent
 import com.softartdev.notecrypt.ui.base.BasePresenter
-
 import javax.inject.Inject
 
 @ConfigPersistent
 class SignInPresenter @Inject
-constructor(private val dbStore: DbStore) : BasePresenter<SignInView>() {
+constructor(private val dataManager: DataManager) : BasePresenter<SignInView>() {
 
     override fun attachView(mvpView: SignInView) {
         super.attachView(mvpView)
@@ -26,6 +25,6 @@ constructor(private val dbStore: DbStore) : BasePresenter<SignInView>() {
     }
 
     private fun checkPass(pass: String): Boolean {
-        return dbStore.checkPass(pass)
+        return dataManager.checkPass(pass)
     }
 }
