@@ -26,7 +26,10 @@ constructor(private val dataManager: DataManager) : BasePresenter<SecurityView>(
         addDisposable(dataManager.changePass(odlPass, newPass)
                 .subscribe(
                         { Timber.d("Password changed") }
-                        , { it.printStackTrace() }))
+                        , { throwable ->
+                            throwable.printStackTrace()
+                            mvpView!!.showError(throwable.message)
+                }))
     }
 
     fun changeEncryption(checked: Boolean) {

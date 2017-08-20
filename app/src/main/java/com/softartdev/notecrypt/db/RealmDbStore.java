@@ -6,7 +6,6 @@ import com.softartdev.notecrypt.model.Note;
 
 import java.util.UUID;
 
-import io.realm.Realm;
 import io.realm.RealmResults;
 import timber.log.Timber;
 
@@ -24,30 +23,24 @@ public class RealmDbStore extends RealmDbRepository {
     @Override
     public Note createNote() {
         final long noteId = UUID.randomUUID().getLeastSignificantBits();
-        getRealm().executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                Note note = realm.createObject(Note.class, noteId);
-                note.setTitle("");
-                note.setText("");
-            }
+        getRealm().executeTransaction(realm -> {
+            Note note = realm.createObject(Note.class, noteId);
+            note.setTitle("");
+            note.setText("");
         });
         return loadNote(noteId);
     }
 
     @Override
     public void saveNote(final long noteId, final String title, final String text) {
-        getRealm().executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                Note note = realm.where(Note.class).equalTo("id", noteId).findFirst();
-                if (note == null) {
-                    note = realm.createObject(Note.class, noteId);
-                }
-                note.setTitle(title);
-                note.setText(text);
-                realm.copyToRealmOrUpdate(note);
+        getRealm().executeTransaction(realm -> {
+            Note note = realm.where(Note.class).equalTo("id", noteId).findFirst();
+            if (note == null) {
+                note = realm.createObject(Note.class, noteId);
             }
+            note.setTitle(title);
+            note.setText(text);
+            realm.copyToRealmOrUpdate(note);
         });
     }
 
@@ -61,12 +54,9 @@ public class RealmDbStore extends RealmDbRepository {
 
     @Override
     public void deleteNote(final long noteId) {
-        getRealm().executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                Note note = realm.where(Note.class).equalTo("id", noteId).findFirst();
-                note.deleteFromRealm();
-            }
+        getRealm().executeTransaction(realm -> {
+            Note note = realm.where(Note.class).equalTo("id", noteId).findFirst();
+            note.deleteFromRealm();
         });
     }
 }

@@ -8,6 +8,8 @@ internal interface SecurityView : MvpView {
     fun showSetPasswordDialog()
     fun showChangePasswordDialog()
 
+    fun showError(message: String?)
+
     interface DialogDirector {
         val textString: String?
         fun showIncorrectPasswordError()

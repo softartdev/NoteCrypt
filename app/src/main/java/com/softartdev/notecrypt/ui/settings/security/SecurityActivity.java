@@ -19,6 +19,8 @@ import android.widget.Switch;
 import com.softartdev.notecrypt.R;
 import com.softartdev.notecrypt.ui.base.BaseActivity;
 
+import org.jetbrains.annotations.Nullable;
+
 import javax.inject.Inject;
 
 public class SecurityActivity extends BaseActivity implements SecurityView, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
@@ -174,6 +176,15 @@ public class SecurityActivity extends BaseActivity implements SecurityView, View
         public void hideError() {
             mTextInputLayout.setError(null);
         }
+    }
+
+    @Override
+    public void showError(@Nullable String message) {
+        new AlertDialog.Builder(this)
+                .setTitle(android.R.string.dialog_alert_title)
+                .setMessage(message)
+                .setNeutralButton(android.R.string.cancel, (dialog, which) -> dialog.cancel())
+                .show();
     }
 
     @Override

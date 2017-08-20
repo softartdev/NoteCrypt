@@ -1,13 +1,12 @@
 package com.softartdev.notecrypt.db;
 
 import android.content.Context;
-import android.text.TextUtils;
 
 import java.io.File;
+import java.util.Arrays;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import io.realm.exceptions.RealmFileException;
 import timber.log.Timber;
 
 abstract class RealmDbRepository implements DbStore {
@@ -17,7 +16,7 @@ abstract class RealmDbRepository implements DbStore {
         Realm.init(context);
     }
 
-    public Realm getRealm() {
+    Realm getRealm() {
         return mRealm;
     }
 
@@ -36,7 +35,7 @@ abstract class RealmDbRepository implements DbStore {
             RealmConfiguration realmConfiguration = builder.build();
             mRealm = Realm.getInstance(realmConfiguration);
             return true;
-        } catch (RealmFileException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -47,34 +46,49 @@ abstract class RealmDbRepository implements DbStore {
         byte[] oldKey = getSecureKey(oldPass);
         byte[] newKey = getSecureKey(newPass);
 
-        String oldName = mRealm.getConfiguration().getRealmFileName();
-        if (mRealm != null) {
-            mRealm.close();
-            mRealm = null;
-        }
-        String newName = getNextName(oldName);
-
-        RealmConfiguration.Builder oldBuilder = new RealmConfiguration.Builder();
-        oldBuilder.name(oldName);
-        if (oldKey != null) {
-            oldBuilder.encryptionKey(oldKey);
-        }
-        RealmConfiguration oldConfig = oldBuilder.build();
-
-        Realm oldRealm = Realm.getInstance(oldConfig);
-
-        File dir = oldConfig.getRealmDirectory();
-        oldRealm.writeEncryptedCopyTo(new File(dir, newName), newKey);
-        oldRealm.close();
-        if (Realm.deleteRealm(oldConfig)) {
-            Timber.d("%s deleted", oldName);
+        RealmConfiguration defaultConfig = mRealm.getConfiguration();
+        byte[] key = defaultConfig.getEncryptionKey();
+        if (!Arrays.equals(oldKey, key)) {
+            Timber.d("Original: %s", Arrays.toString(key));
+            Timber.d("Typed:    %s", Arrays.toString(oldKey));
+            throw new RuntimeException("Wrong old password");
         }
 
-        RealmConfiguration newConfig = new RealmConfiguration.Builder()
-                .name(newName)
-                .encryptionKey(newKey)
-                .build();
-        Realm.setDefaultConfiguration(newConfig);
+        String defaultFileName = RealmConfiguration.DEFAULT_REALM_NAME; // default.realm
+        String tempFileName = "temp.realm";
+
+        File dir = defaultConfig.getRealmDirectory();
+        File tempFile = new File(dir, tempFileName);
+//        mRealm.writeEncryptedCopyTo(tempFile, newKey);
+        mRealm.executeTransaction(realm -> {
+            realm.writeEncryptedCopyTo(tempFile, newKey);
+            realm.close();
+        });
+        mRealm.close();
+//        mRealm = null;
+
+        int count = Realm.getGlobalInstanceCount(defaultConfig);
+        if (count != 0) {
+            Timber.d("Open %s instances of Realm", count);
+        }
+
+        if (Realm.deleteRealm(defaultConfig)) {
+            Timber.d("%s deleted", defaultFileName);
+        }
+        Realm.removeDefaultConfiguration();
+
+        File defaultFile = new File(dir, defaultFileName);
+        if (tempFile.renameTo(defaultFile)) {
+            Timber.d("%s renamed to %s", tempFileName, defaultFileName);
+        }
+
+        RealmConfiguration.Builder builder = new RealmConfiguration.Builder();
+        builder.name(defaultFileName);
+        if (newKey != null) {
+            builder.encryptionKey(newKey);
+        }
+        defaultConfig = builder.build();
+        Realm.setDefaultConfiguration(defaultConfig);
         mRealm = Realm.getDefaultInstance();
     }
 
@@ -86,22 +100,5 @@ abstract class RealmDbRepository implements DbStore {
         byte[] encryptionKey = new byte[64];
         System.arraycopy(source, 0, encryptionKey, 0, source.length);
         return encryptionKey;
-    }
-
-    private String getNextName(String oldName) {
-        String prefix = "default";
-        String extension = ".realm";
-        String oldVerString = oldName.replace(prefix,"").replace(extension, ""); // default[ver].realm -> [ver]
-        int newVer, oldVer;
-        if (TextUtils.isEmpty(oldVerString)) {
-            oldVer = 0;
-        } else {
-            oldVer = Integer.parseInt(oldVerString);
-        }
-        newVer = oldVer + 1;
-        String newVerString = String.valueOf(newVer);
-        String newName = prefix.concat(newVerString).concat(extension);
-        Timber.d("New file name: %s", newName);
-        return newName;
     }
 }
