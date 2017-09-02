@@ -2,6 +2,8 @@ package com.softartdev.notecrypt.db;
 
 import com.softartdev.notecrypt.model.Note;
 
+import org.jetbrains.annotations.NotNull;
+
 import io.realm.RealmResults;
 
 public interface DbStore {
@@ -20,4 +22,8 @@ public interface DbStore {
     boolean isEncryption();
 
     void changePass(String odlPass, String newPass);
+
+    boolean isChanged(long id, @NotNull String title, @NotNull String text);
+
+    boolean isEmpty(long id);
 }

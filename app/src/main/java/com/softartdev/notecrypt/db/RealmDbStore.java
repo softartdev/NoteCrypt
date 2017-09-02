@@ -1,8 +1,11 @@
 package com.softartdev.notecrypt.db;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.softartdev.notecrypt.model.Note;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -58,5 +61,21 @@ public class RealmDbStore extends RealmDbRepository {
             Note note = realm.where(Note.class).equalTo("id", noteId).findFirst();
             note.deleteFromRealm();
         });
+    }
+
+    @Override
+    public boolean isChanged(long id, @NotNull String title, @NotNull String text) {
+        Note note = loadNote(id);
+        String savedTitle = note.getTitle();
+        String savedText = note.getText();
+        return !title.equals(savedTitle) || !text.equals(savedText);
+    }
+
+    @Override
+    public boolean isEmpty(long id) {
+        Note note = loadNote(id);
+        String savedTitle = note.getTitle();
+        String savedText = note.getText();
+        return TextUtils.isEmpty(savedTitle) && TextUtils.isEmpty(savedText);
     }
 }

@@ -43,4 +43,12 @@ internal constructor(private val dbStore: DbStore) {
     fun changePass(@Nullable odlPass: String?, @Nullable newPass: String?): Single<Unit> {
         return Single.fromCallable { dbStore.changePass(odlPass, newPass) }
     }
+
+    fun checkChanges(id: Long, title: String, text: String): Boolean {
+        return dbStore.isChanged(id, title, text)
+    }
+
+    fun emptyNote(id: Long): Boolean {
+        return dbStore.isEmpty(id)
+    }
 }

@@ -60,13 +60,13 @@ constructor(private val dataManager: DataManager) : BasePresenter<NoteView>() {
     }
 
     fun checkSaveChange(title: String, text: String) {
-        val savedTitle = mNote!!.title
-        val savedText = mNote!!.text
-        if (title != savedTitle || text != savedText) {
+        val changed = dataManager.checkChanges(mNote!!.id, title, text)
+        if (changed) {
             mvpView!!.onCheckSaveChange()
             return
         }
-        if (savedTitle == "" && savedText == "") {
+        val empty = dataManager.emptyNote(mNote!!.id)
+        if (empty) {
             deleteNote()
         }
         mvpView!!.onNavBack()
