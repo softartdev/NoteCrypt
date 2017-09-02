@@ -1,12 +1,12 @@
 package com.softartdev.notecrypt.ui.settings.security;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,20 +17,28 @@ import android.widget.EditText;
 import android.widget.Switch;
 
 import com.softartdev.notecrypt.R;
+import com.softartdev.notecrypt.ui.base.BaseActivity;
 
-public class SecurityActivity extends AppCompatActivity implements SecurityView, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+import org.jetbrains.annotations.Nullable;
+
+import javax.inject.Inject;
+
+public class SecurityActivity extends BaseActivity implements SecurityView, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+    @Inject
     SecurityPresenter mPresenter;
+
     Switch enableEncryptionSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_security);
-        mPresenter = new SecurityPresenter(this);
-        enableEncryptionSwitch = (Switch) findViewById(R.id.enable_encryption_switch);
+        activityComponent().inject(this);
+        mPresenter.attachView(this);
+        enableEncryptionSwitch = findViewById(R.id.enable_encryption_switch);
         enableEncryptionSwitch.setChecked(mPresenter.isEncryption());
         enableEncryptionSwitch.setOnCheckedChangeListener(this);
-        Button passButton = (Button) findViewById(R.id.set_password_button);
+        Button passButton = findViewById(R.id.set_password_button);
         passButton.setOnClickListener(this);
     }
 
@@ -62,31 +70,20 @@ public class SecurityActivity extends AppCompatActivity implements SecurityView,
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.dialog_password, null);
-        final TextInputLayout enterPassTextInputLayout = (TextInputLayout) view.findViewById(R.id.enter_password_text_input_layout);
-        final EditText enterPassEditText = (EditText) view.findViewById(R.id.enter_password_edit_text);
+        final TextInputLayout enterPassTextInputLayout = view.findViewById(R.id.enter_password_text_input_layout);
+        final TextInputEditText enterPassEditText = view.findViewById(R.id.enter_password_edit_text);
         builder.setView(view)
                 .setPositiveButton(android.R.string.ok, null)
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
+                .setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.cancel());
         final AlertDialog alertDialog = builder.create();
-        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
-                Button okButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                okButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        DialogDirector pass = new PassMediator(enterPassTextInputLayout, enterPassEditText);
-                        if (mPresenter.enterPassCorrect(pass)) {
-                            alertDialog.dismiss();
-                        }
-                    }
-                });
-            }
+        alertDialog.setOnShowListener(dialog -> {
+            Button okButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            okButton.setOnClickListener(v -> {
+                DialogDirector pass = new PassMediator(enterPassTextInputLayout, enterPassEditText);
+                if (mPresenter.enterPassCorrect(pass)) {
+                    alertDialog.dismiss();
+                }
+            });
         });
         alertDialog.show();
     }
@@ -96,34 +93,23 @@ public class SecurityActivity extends AppCompatActivity implements SecurityView,
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.dialog_set_password, null);
-        final TextInputLayout setPassTextInputLayout = (TextInputLayout) view.findViewById(R.id.set_password_text_input_layout);
-        final EditText setPassEditText = (EditText) view.findViewById(R.id.set_password_edit_text);
-        final TextInputLayout repeatSetPassTextInputLayout = (TextInputLayout) view.findViewById(R.id.repeat_set_password_text_input_layout);
-        final EditText repeatSetPassEditText = (EditText) view.findViewById(R.id.repeat_set_password_edit_text);
+        final TextInputLayout setPassTextInputLayout = view.findViewById(R.id.set_password_text_input_layout);
+        final TextInputEditText setPassEditText = view.findViewById(R.id.set_password_edit_text);
+        final TextInputLayout repeatSetPassTextInputLayout = view.findViewById(R.id.repeat_set_password_text_input_layout);
+        final TextInputEditText repeatSetPassEditText = view.findViewById(R.id.repeat_set_password_edit_text);
         builder.setView(view)
                 .setPositiveButton(android.R.string.ok, null)
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-        final AlertDialog alertDialog = builder.create();
-        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
-                Button okButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                okButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        DialogDirector pass = new PassMediator(setPassTextInputLayout, setPassEditText);
-                        DialogDirector repeatPass = new PassMediator(repeatSetPassTextInputLayout, repeatSetPassEditText);
-                        if (mPresenter.setPassCorrect(pass, repeatPass)) {
-                            alertDialog.dismiss();
-                        }
-                    }
-                });
-            }
+                .setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.cancel());
+        final AlertDialog alertDialog = builder.create(); //TODO: try to make it global for move positive button listener above
+        alertDialog.setOnShowListener(dialog -> {
+            Button okButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            okButton.setOnClickListener(v -> {
+                DialogDirector pass = new PassMediator(setPassTextInputLayout, setPassEditText);
+                DialogDirector repeatPass = new PassMediator(repeatSetPassTextInputLayout, repeatSetPassEditText);
+                if (mPresenter.setPassCorrect(pass, repeatPass)) {
+                    alertDialog.dismiss();
+                }
+            });
         });
         alertDialog.show();
     }
@@ -133,37 +119,26 @@ public class SecurityActivity extends AppCompatActivity implements SecurityView,
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.dialog_change_password, null);
-        final TextInputLayout oldPassTextInputLayout = (TextInputLayout) view.findViewById(R.id.old_password_text_input_layout);
-        final EditText oldPassEditText = (EditText) view.findViewById(R.id.old_password_edit_text);
-        final TextInputLayout newPassTextInputLayout = (TextInputLayout) view.findViewById(R.id.new_password_text_input_layout);
-        final EditText newPassEditText = (EditText) view.findViewById(R.id.new_password_edit_text);
-        final TextInputLayout repeatPassTextInputLayout = (TextInputLayout) view.findViewById(R.id.repeat_new_password_text_input_layout);
-        final EditText repeatNewPassEditText = (EditText) view.findViewById(R.id.repeat_new_password_edit_text);
+        final TextInputLayout oldPassTextInputLayout = view.findViewById(R.id.old_password_text_input_layout);
+        final TextInputEditText oldPassEditText = view.findViewById(R.id.old_password_edit_text);
+        final TextInputLayout newPassTextInputLayout = view.findViewById(R.id.new_password_text_input_layout);
+        final TextInputEditText newPassEditText = view.findViewById(R.id.new_password_edit_text);
+        final TextInputLayout repeatPassTextInputLayout = view.findViewById(R.id.repeat_new_password_text_input_layout);
+        final TextInputEditText repeatNewPassEditText = view.findViewById(R.id.repeat_new_password_edit_text);
         builder.setView(view)
                 .setPositiveButton(android.R.string.ok, null)
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
+                .setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.cancel());
         final AlertDialog alertDialog = builder.create();
-        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(final DialogInterface dialog) {
-                Button okButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                okButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        DialogDirector oldPass = new PassMediator(oldPassTextInputLayout, oldPassEditText);
-                        DialogDirector newPass = new PassMediator(newPassTextInputLayout, newPassEditText);
-                        DialogDirector repeatNewPass = new PassMediator(repeatPassTextInputLayout, repeatNewPassEditText);
-                        if (mPresenter.changePassCorrect(oldPass, newPass, repeatNewPass)) {
-                            alertDialog.dismiss();
-                        }
-                    }
-                });
-            }
+        alertDialog.setOnShowListener(dialog -> {
+            Button okButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            okButton.setOnClickListener(v -> {
+                DialogDirector oldPass = new PassMediator(oldPassTextInputLayout, oldPassEditText);
+                DialogDirector newPass = new PassMediator(newPassTextInputLayout, newPassEditText);
+                DialogDirector repeatNewPass = new PassMediator(repeatPassTextInputLayout, repeatNewPassEditText);
+                if (mPresenter.changePassCorrect(oldPass, newPass, repeatNewPass)) {
+                    alertDialog.dismiss();
+                }
+            });
         });
         alertDialog.show();
     }
@@ -204,7 +179,16 @@ public class SecurityActivity extends AppCompatActivity implements SecurityView,
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public void showError(@Nullable String message) {
+        new AlertDialog.Builder(this)
+                .setTitle(android.R.string.dialog_alert_title)
+                .setMessage(message)
+                .setNeutralButton(android.R.string.cancel, (dialog, which) -> dialog.cancel())
+                .show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 NavUtils.navigateUpTo(this, NavUtils.getParentActivityIntent(this));
@@ -215,7 +199,7 @@ public class SecurityActivity extends AppCompatActivity implements SecurityView,
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         return true;
     }
 }
