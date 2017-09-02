@@ -10,6 +10,8 @@ import io.realm.RealmConfiguration;
 import timber.log.Timber;
 
 abstract class RealmDbRepository implements DbStore {
+    private static final String DEFAULT_FILE_NAME = RealmConfiguration.DEFAULT_REALM_NAME; // default.realm
+    private static final String TEMP_FILE_NAME = "temp.realm";
     private Realm mRealm;
 
     RealmDbRepository(Context context) {
@@ -54,36 +56,29 @@ abstract class RealmDbRepository implements DbStore {
             throw new RuntimeException("Wrong old password");
         }
 
-        String defaultFileName = RealmConfiguration.DEFAULT_REALM_NAME; // default.realm
-        String tempFileName = "temp.realm";
-
         File dir = defaultConfig.getRealmDirectory();
-        File tempFile = new File(dir, tempFileName);
-//        mRealm.writeEncryptedCopyTo(tempFile, newKey);
-        mRealm.executeTransaction(realm -> {
-            realm.writeEncryptedCopyTo(tempFile, newKey);
-            realm.close();
-        });
-        mRealm.close();
-//        mRealm = null;
+        File tempFile = new File(dir, TEMP_FILE_NAME);
+        mRealm.writeEncryptedCopyTo(tempFile, newKey);
 
         int count = Realm.getGlobalInstanceCount(defaultConfig);
-        if (count != 0) {
+        while (count != 0) {
             Timber.d("Open %s instances of Realm", count);
+            mRealm.close();
+            count = Realm.getGlobalInstanceCount(defaultConfig);
         }
 
         if (Realm.deleteRealm(defaultConfig)) {
-            Timber.d("%s deleted", defaultFileName);
+            Timber.d("%s deleted", DEFAULT_FILE_NAME);
         }
         Realm.removeDefaultConfiguration();
 
-        File defaultFile = new File(dir, defaultFileName);
+        File defaultFile = new File(dir, DEFAULT_FILE_NAME);
         if (tempFile.renameTo(defaultFile)) {
-            Timber.d("%s renamed to %s", tempFileName, defaultFileName);
+            Timber.d("%s renamed to %s", TEMP_FILE_NAME, DEFAULT_FILE_NAME);
         }
 
         RealmConfiguration.Builder builder = new RealmConfiguration.Builder();
-        builder.name(defaultFileName);
+        builder.name(DEFAULT_FILE_NAME);
         if (newKey != null) {
             builder.encryptionKey(newKey);
         }
