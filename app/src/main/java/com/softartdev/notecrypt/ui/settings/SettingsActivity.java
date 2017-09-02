@@ -1,6 +1,5 @@
 package com.softartdev.notecrypt.ui.settings;
 
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -14,11 +13,11 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
+import com.softartdev.notecrypt.BuildConfig;
 import com.softartdev.notecrypt.R;
 
 import java.util.List;
@@ -40,30 +39,27 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
      */
-    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object value) {
-            String stringValue = value.toString();
+    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = (preference, value) -> {
+        String stringValue = value.toString();
 
-            if (preference instanceof ListPreference) {
-                // For list preferences, look up the correct display value in
-                // the preference's 'entries' list.
-                ListPreference listPreference = (ListPreference) preference;
-                int index = listPreference.findIndexOfValue(stringValue);
+        if (preference instanceof ListPreference) {
+            // For list preferences, look up the correct display value in
+            // the preference's 'entries' list.
+            ListPreference listPreference = (ListPreference) preference;
+            int index = listPreference.findIndexOfValue(stringValue);
 
-                // Set the summary to reflect the new value.
-                preference.setSummary(
-                        index >= 0
-                                ? listPreference.getEntries()[index]
-                                : null);
+            // Set the summary to reflect the new value.
+            preference.setSummary(
+                    index >= 0
+                            ? listPreference.getEntries()[index]
+                            : null);
 
-            } else {
-                // For all other preferences, set the summary to the value's
-                // simple string representation.
-                preference.setSummary(stringValue);
-            }
-            return true;
+        } else {
+            // For all other preferences, set the summary to the value's
+            // simple string representation.
+            preference.setSummary(stringValue);
         }
+        return true;
     };
 
     /**
@@ -140,7 +136,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     @Override
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void onBuildHeaders(List<Header> target) {
-        loadHeadersFromResource(R.xml.pref_headers, target);
+        if (BuildConfig.DEBUG) {
+            loadHeadersFromResource(R.xml.pref_headers_debug, target);
+        } else {
+            loadHeadersFromResource(R.xml.pref_headers_release, target);
+        }
     }
 
     /**
@@ -149,7 +149,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      */
     protected boolean isValidFragment(String fragmentName) {
         return PreferenceFragment.class.getName().equals(fragmentName)
-                || SecurityPreferenceFragment.class.getName().equals(fragmentName)
                 || LanguagePreferenceFragment.class.getName().equals(fragmentName);
     }
 
@@ -163,18 +162,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 return true;
             }
             return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class SecurityPreferenceFragment extends SettingsFragment {
-        @Override
-        public void onCreate(@Nullable Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_security);
-            setHasOptionsMenu(true);
-
-            bindPreferenceSummaryToValue(findPreference("password"));
         }
     }
 

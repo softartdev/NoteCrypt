@@ -4,12 +4,22 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'realm-android'
 
-def support_version = "26.0.1"
+def support_version = "26.0.2"
 def dagger_version = "2.8"
 
 android {
     compileSdkVersion 26
     buildToolsVersion "25.0.3"
+    if(project.hasProperty("RELEASE_STORE_FILE")) {
+        signingConfigs {
+            config {
+                storeFile file(RELEASE_STORE_FILE)
+                storePassword RELEASE_STORE_PASSWORD
+                keyAlias RELEASE_KEY_ALIAS
+                keyPassword RELEASE_KEY_PASSWORD
+            }
+        }
+    }
     defaultConfig {
         applicationId "com.softartdev.notecrypt"
         minSdkVersion 15
@@ -23,6 +33,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
 
@@ -61,7 +72,7 @@ dependencies {
         exclude group: 'com.android.support'
     }
 //    testCompile 'com.github.jonasrottmann.realm-browser:realm-browser-no-op:0.0.13'
-//    releaseCompile 'com.github.jonasrottmann.realm-browser:realm-browser-no-op:0.0.13'
+    releaseImplementation 'com.github.jonasrottmann.realm-browser:realm-browser-no-op:0.0.13'
 
     kaptTest "com.google.dagger:dagger-compiler:$dagger_version"
     testImplementation "junit:junit:4.12"
