@@ -26,6 +26,9 @@
     <!-- Strings related to Settings -->
     <string name="title_activity_settings">Settings</string>
 
+    <!-- Settings for Storage -->
+    <string name="pref_header_storage">Storage</string>
+
     <!-- Settings for Security -->
     <string name="pref_header_security">Security</string>
     <string name="pref_title_enable_encryption">Enable encryption</string>

@@ -37,4 +37,5 @@
         <item>Английский</item>
         <item>Русский</item>
     </string-array>
+    <string name="pref_header_storage">Хранилище</string>
 </resources>
