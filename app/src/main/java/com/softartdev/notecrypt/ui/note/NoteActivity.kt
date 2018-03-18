@@ -36,7 +36,7 @@ class NoteActivity : BaseActivity(), NoteView {
         setSupportActionBar(note_toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        save_note_fab.setOnClickListener { mPresenter.saveNote(note_title_edit_text.text.toString(), note_edit_text.text.toString()) }
+        save_note_fab.setOnClickListener { saveNote() }
 
         val noteId = intent.getLongExtra(NOTE_ID, 0L)
         if (noteId != 0L) {
@@ -109,13 +109,19 @@ class NoteActivity : BaseActivity(), NoteView {
             setTitle(R.string.note_changes_not_saved_dialog_title)
             setMessage(R.string.note_save_change_dialog_message)
             setPositiveButton(R.string.yes) { _, _ ->
-                mPresenter.saveNote(note_title_edit_text.text.toString(), note_edit_text.text.toString())
+                saveNote()
                 onNavBack()
             }
             setNegativeButton(R.string.no) { _, _ -> onNavBack() }
             setNeutralButton(android.R.string.cancel) { dialog, _ -> dialog.cancel() }
             show()
         }
+    }
+
+    private fun saveNote() {
+        val title: String = note_title_edit_text.text.toString()
+        val text: String = note_edit_text.text.toString()
+        mPresenter.saveNote(title, text)
     }
 
     override fun onNavBack() {

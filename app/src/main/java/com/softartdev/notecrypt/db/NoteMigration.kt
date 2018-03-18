@@ -1,5 +1,6 @@
 package com.softartdev.notecrypt.db
 
+import com.softartdev.notecrypt.model.Note
 import io.realm.DynamicRealm
 import io.realm.FieldAttribute
 import io.realm.RealmMigration
@@ -12,9 +13,12 @@ internal class NoteMigration : RealmMigration {
 
         // Migrate to version 1: Add a dates created & modified.
         if (oldVersion == 0L) {
-            schema.get("Note")!!
-                    .addField("dateCreated", Date::class.java, FieldAttribute.REQUIRED)
-                    .addField("dateModified", Date::class.java, FieldAttribute.REQUIRED)
+            schema.get(Note::class.java.simpleName)?.apply {
+                setRequired(Note::title.name, true)
+                setRequired(Note::text.name, true)
+                addField(Note::dateCreated.name, Date::class.java, FieldAttribute.REQUIRED)
+                addField(Note::dateModified.name, Date::class.java, FieldAttribute.REQUIRED)
+            }
         }
 
     }
