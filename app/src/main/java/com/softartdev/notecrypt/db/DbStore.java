@@ -4,10 +4,10 @@ import com.softartdev.notecrypt.model.Note;
 
 import org.jetbrains.annotations.NotNull;
 
-import io.realm.RealmResults;
+import java.util.List;
 
 public interface DbStore {
-    RealmResults<Note> getNotes();
+    List<Note> getNotes();
 
     Note createNote();
 

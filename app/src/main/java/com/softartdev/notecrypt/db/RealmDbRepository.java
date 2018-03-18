@@ -34,6 +34,8 @@ abstract class RealmDbRepository implements DbStore {
             if (password != null) {
                 builder.encryptionKey(getSecureKey(password));
             }
+            builder.schemaVersion(1);
+            builder.migration(new NoteMigration());
             RealmConfiguration realmConfiguration = builder.build();
             mRealm = Realm.getInstance(realmConfiguration);
             return true;

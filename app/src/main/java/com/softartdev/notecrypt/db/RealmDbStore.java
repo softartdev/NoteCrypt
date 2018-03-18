@@ -7,6 +7,8 @@ import com.softartdev.notecrypt.model.Note;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import io.realm.RealmResults;
@@ -19,8 +21,9 @@ public class RealmDbStore extends RealmDbRepository {
     }
 
     @Override
-    public RealmResults<Note> getNotes() {
-        return getRealm().where(Note.class).findAll();
+    public List<Note> getNotes() {
+        RealmResults<Note> noteResults = getRealm().where(Note.class).findAll();
+        return getRealm().copyFromRealm(noteResults);
     }
 
     @Override
@@ -43,6 +46,7 @@ public class RealmDbStore extends RealmDbRepository {
             }
             note.setTitle(title);
             note.setText(text);
+            note.setDateModified(new Date());
             realm.copyToRealmOrUpdate(note);
         });
     }
