@@ -15,8 +15,8 @@ import javax.inject.Inject
 @ConfigPersistent
 class MainAdapter @Inject
 constructor() : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
-    var mNotes: RealmResults<Note>? = null
-    var mMainView: MainView? = null
+    private var mNotes: RealmResults<Note>? = null
+    private var mMainView: MainView? = null
 
     fun setNotes(notes: RealmResults<Note>, mainView: MainView) {
         mNotes = notes
@@ -28,8 +28,8 @@ constructor() : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
         var titleTextView: TextView? = null
 
         init {
-            itemCardView = v.findViewById<CardView>(R.id.item_note_card_view)
-            titleTextView = v.findViewById<TextView>(R.id.item_note_title_text_view)
+            itemCardView = v.findViewById(R.id.item_note_card_view)
+            titleTextView = v.findViewById(R.id.item_note_title_text_view)
         }
     }
 
@@ -38,17 +38,11 @@ constructor() : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
         return ViewHolder(v)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val note = mNotes!![position]
-        holder.titleTextView?.text = note.title
-        holder.itemCardView?.setOnClickListener { mMainView!!.onNote(note.id) }
-    }
+    override fun getItemCount(): Int = mNotes?.size ?: 0
 
-    override fun getItemCount(): Int {
-        if (mNotes == null) {
-            return 0
-        } else {
-            return mNotes!!.size
-        }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val note = mNotes?.get(position)
+        holder.titleTextView?.text = note?.title
+        holder.itemCardView?.setOnClickListener { note?.let { mMainView?.onNote(it.id) } }
     }
 }

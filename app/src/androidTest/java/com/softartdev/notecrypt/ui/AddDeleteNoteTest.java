@@ -22,6 +22,7 @@ import org.junit.runner.RunWith;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
@@ -29,9 +30,7 @@ import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
@@ -64,11 +63,7 @@ public class AddDeleteNoteTest {
                 allOf(withId(R.id.save_note_fab), isDisplayed()));
         floatingActionButton2.perform(click());
 
-        ViewInteraction appCompatImageButton = onView(
-                allOf(withContentDescription("Перейти вверх"),
-                        withParent(withId(R.id.toolbar)),
-                        isDisplayed()));
-        appCompatImageButton.perform(click());
+        pressBack();
 
         ViewInteraction textView = onView(
                 allOf(withId(R.id.item_note_title_text_view), withText("Lorem ipsum"),
@@ -97,11 +92,7 @@ public class AddDeleteNoteTest {
                 allOf(withId(R.id.save_note_fab), isDisplayed()));
         floatingActionButton4.perform(click());
 
-        ViewInteraction appCompatImageButton2 = onView(
-                allOf(withContentDescription("Перейти вверх"),
-                        withParent(withId(R.id.toolbar)),
-                        isDisplayed()));
-        appCompatImageButton2.perform(click());
+        pressBack();
 
         ViewInteraction textView2 = onView(
                 allOf(withId(R.id.item_note_title_text_view), withText("Sed ut perspiciatis"),
@@ -121,18 +112,12 @@ public class AddDeleteNoteTest {
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
 
         ViewInteraction appCompatTextView = onView(
-                allOf(withId(R.id.title), withText("Удалить заметку"), isDisplayed()));
+                allOf(withId(R.id.title), withText(R.string.action_delete_note), isDisplayed()));
         appCompatTextView.perform(click());
 
         ViewInteraction appCompatButton = onView(
-                allOf(withId(android.R.id.button1), withText("ОК")));
+                allOf(withId(android.R.id.button1), withText(android.R.string.yes)));
         appCompatButton.perform(scrollTo(), click());
-
-        ViewInteraction appCompatImageButton3 = onView(
-                allOf(withContentDescription("Перейти вверх"),
-                        withParent(withId(R.id.toolbar)),
-                        isDisplayed()));
-        appCompatImageButton3.perform(click());
 
         ViewInteraction recyclerView2 = onView(
                 allOf(withId(R.id.notes_recycler_view), isDisplayed()));
@@ -141,18 +126,12 @@ public class AddDeleteNoteTest {
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
 
         ViewInteraction appCompatTextView2 = onView(
-                allOf(withId(R.id.title), withText("Удалить заметку"), isDisplayed()));
+                allOf(withId(R.id.title), withText(R.string.action_delete_note), isDisplayed()));
         appCompatTextView2.perform(click());
 
         ViewInteraction appCompatButton2 = onView(
-                allOf(withId(android.R.id.button1), withText("ОК")));
+                allOf(withId(android.R.id.button1), withText(android.R.string.yes)));
         appCompatButton2.perform(scrollTo(), click());
-
-        ViewInteraction appCompatImageButton4 = onView(
-                allOf(withContentDescription("Перейти вверх"),
-                        withParent(withId(R.id.toolbar)),
-                        isDisplayed()));
-        appCompatImageButton4.perform(click());
 
         onView(withId(R.id.add_note_text_view)).check(matches(isDisplayed()));
     }

@@ -1,5 +1,6 @@
 package com.softartdev.notecrypt.ui.base
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.util.LongSparseArray
@@ -34,7 +35,7 @@ abstract class BaseFragment : Fragment() {
         if (sComponentsArray.get(mFragmentId) == null) {
             Timber.i("Creating new ConfigPersistentComponent id=%d", mFragmentId)
             configPersistentComponent = DaggerConfigPersistentComponent.builder()
-                    .applicationComponent(App[activity].component)
+                    .applicationComponent(App[activity as Context].component)
                     .build()
             sComponentsArray.put(mFragmentId, configPersistentComponent)
         } else {
@@ -44,21 +45,18 @@ abstract class BaseFragment : Fragment() {
         mFragmentComponent = configPersistentComponent.fragmentComponent(FragmentModule(this))
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        val view: View? = inflater?.inflate(layout, container, false)
-        return view
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
+            = inflater.inflate(layout, container, false)
 
     abstract val layout: Int
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState?.putLong(KEY_FRAGMENT_ID, mFragmentId)
+        outState.putLong(KEY_FRAGMENT_ID, mFragmentId)
     }
 
     override fun onDestroy() {
-        if (!activity.isChangingConfigurations) {
+        if (activity?.isChangingConfigurations == false) {
             Timber.i("Clearing ConfigPersistentComponent id=%d", mFragmentId)
             sComponentsArray.remove(mFragmentId)
         }
@@ -70,8 +68,7 @@ abstract class BaseFragment : Fragment() {
     }
 
     companion object {
-
-        private val KEY_FRAGMENT_ID = "KEY_FRAGMENT_ID"
+        private const val KEY_FRAGMENT_ID = "KEY_FRAGMENT_ID"
         private val sComponentsArray = LongSparseArray<ConfigPersistentComponent>()
         private val NEXT_ID = AtomicLong(0)
     }
