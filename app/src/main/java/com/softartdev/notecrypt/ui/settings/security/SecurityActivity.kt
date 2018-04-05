@@ -12,6 +12,7 @@ import android.widget.CompoundButton
 import android.widget.EditText
 import com.softartdev.notecrypt.R
 import com.softartdev.notecrypt.ui.base.BaseActivity
+import io.github.tonnyl.spark.Spark
 import kotlinx.android.synthetic.main.activity_security.*
 import kotlinx.android.synthetic.main.dialog_change_password.view.*
 import kotlinx.android.synthetic.main.dialog_password.view.*
@@ -28,6 +29,8 @@ class SecurityActivity : BaseActivity(), SecurityView, CompoundButton.OnCheckedC
 
     @Inject lateinit var mPresenter: SecurityPresenter
 
+    private lateinit var mSpark: Spark
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_security)
@@ -40,6 +43,21 @@ class SecurityActivity : BaseActivity(), SecurityView, CompoundButton.OnCheckedC
 
         set_password_button.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_password_black_24dp, 0, 0, 0)
         set_password_button.setOnClickListener { mPresenter.changePassword() }
+
+        mSpark = Spark.Builder()
+                .setView(security_layout) // View or view group
+                .setAnimList(Spark.ANIM_RED_PURPLE)
+                .build()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mSpark.startAnimation()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mSpark.stopAnimation()
     }
 
     override fun showEncryptEnable(encryption: Boolean) {

@@ -7,6 +7,7 @@ import com.softartdev.notecrypt.R
 import com.softartdev.notecrypt.model.Note
 import com.softartdev.notecrypt.ui.base.BaseActivity
 import com.softartdev.notecrypt.ui.note.NoteActivity
+import io.github.tonnyl.spark.Spark
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject
@@ -14,6 +15,8 @@ import javax.inject.Inject
 class MainActivity : BaseActivity(), MainView, MainAdapter.ClickListener {
     @Inject lateinit var mPresenter: MainPresenter
     @Inject lateinit var mAdapter: MainAdapter
+
+    private lateinit var mSpark: Spark
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +36,21 @@ class MainActivity : BaseActivity(), MainView, MainAdapter.ClickListener {
         if (mAdapter.itemCount == 0) {
             mPresenter.updateNotes()
         }
+
+        mSpark = Spark.Builder()
+                .setView(main_coordinator) // View or view group
+                .setAnimList(Spark.ANIM_BLUE_PURPLE)
+                .build()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mSpark.startAnimation()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mSpark.stopAnimation()
     }
 
     override fun onUpdateNotes(notes: List<Note>) {

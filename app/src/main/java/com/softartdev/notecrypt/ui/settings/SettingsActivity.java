@@ -15,6 +15,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.MenuItem;
 
 import com.softartdev.notecrypt.BuildConfig;
@@ -166,6 +167,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class LanguagePreferenceFragment extends SettingsFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+
+        static {
+            AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+        }
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);

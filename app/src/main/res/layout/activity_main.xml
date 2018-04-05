@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:background="@color/colorPrimaryDark"
     tools:context="com.softartdev.notecrypt.ui.main.MainActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -21,7 +22,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main"/>
+    <include layout="@layout/content_main" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_note_fab"
@@ -29,6 +30,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_add_black_24dp"/>
+        app:srcCompat="@drawable/ic_add_black_24dp" />
 
 </android.support.design.widget.CoordinatorLayout>

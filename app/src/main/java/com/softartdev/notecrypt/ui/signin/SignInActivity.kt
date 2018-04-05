@@ -28,7 +28,6 @@ class SignInActivity : BaseActivity(), SignInView {
 
         mSpark = Spark.Builder()
                 .setView(sign_in_layout) // View or view group
-                .setDuration(4000)
                 .setAnimList(Spark.ANIM_GREEN_PURPLE)
                 .build()
     }

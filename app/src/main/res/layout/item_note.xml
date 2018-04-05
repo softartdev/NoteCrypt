@@ -10,7 +10,8 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="4dp">
 
         <TextView
             android:id="@+id/item_note_title_text_view"
