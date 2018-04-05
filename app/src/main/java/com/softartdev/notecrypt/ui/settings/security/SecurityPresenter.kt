@@ -8,12 +8,8 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @ConfigPersistent
-internal class SecurityPresenter @Inject
+class SecurityPresenter @Inject
 constructor(private val dataManager: DataManager) : BasePresenter<SecurityView>() {
-
-    override fun attachView(mvpView: SecurityView) {
-        super.attachView(mvpView)
-    }
 
     val isEncryption: Boolean
         get() = dataManager.isEncryption()
@@ -28,19 +24,19 @@ constructor(private val dataManager: DataManager) : BasePresenter<SecurityView>(
                         { Timber.d("Password changed") }
                         , { throwable ->
                             throwable.printStackTrace()
-                            mvpView!!.showError(throwable.message)
+                            mvpView?.showError(throwable.message)
                 }))
     }
 
     fun changeEncryption(checked: Boolean) {
         checkViewAttached()
         if (checked) {
-            mvpView!!.showSetPasswordDialog()
+            mvpView?.showSetPasswordDialog()
         } else {
             if (isEncryption) {
-                mvpView!!.showPasswordDialog()
+                mvpView?.showPasswordDialog()
             } else {
-                mvpView!!.showEncryptEnable(false)
+                mvpView?.showEncryptEnable(false)
             }
         }
     }
@@ -48,9 +44,9 @@ constructor(private val dataManager: DataManager) : BasePresenter<SecurityView>(
     fun changePassword() {
         checkViewAttached()
         if (isEncryption) {
-            mvpView!!.showChangePasswordDialog()
+            mvpView?.showChangePasswordDialog()
         } else {
-            mvpView!!.showSetPasswordDialog()
+            mvpView?.showSetPasswordDialog()
         }
     }
 
@@ -60,16 +56,20 @@ constructor(private val dataManager: DataManager) : BasePresenter<SecurityView>(
         pass.hideError()
 
         val password = pass.textString
-        if (TextUtils.isEmpty(password)) {
-            pass.showEmptyPasswordError()
-            mvpView!!.showEncryptEnable(true)
-        } else if (checkPass(password)) {
-            changePassword(password, null)
-            mvpView!!.showEncryptEnable(false)
-            return true
-        } else {
-            pass.showIncorrectPasswordError()
-            mvpView!!.showEncryptEnable(true)
+        when {
+            TextUtils.isEmpty(password) -> {
+                pass.showEmptyPasswordError()
+                mvpView?.showEncryptEnable(true)
+            }
+            checkPass(password) -> {
+                changePassword(password, null)
+                mvpView?.showEncryptEnable(false)
+                return true
+            }
+            else -> {
+                pass.showIncorrectPasswordError()
+                mvpView?.showEncryptEnable(true)
+            }
         }
 
         return false
@@ -88,7 +88,7 @@ constructor(private val dataManager: DataManager) : BasePresenter<SecurityView>(
                 pass.showEmptyPasswordError()
             } else {
                 changePassword(null, password)
-                mvpView!!.showEncryptEnable(true)
+                mvpView?.showEncryptEnable(true)
                 return true
             }
         } else {
@@ -107,19 +107,17 @@ constructor(private val dataManager: DataManager) : BasePresenter<SecurityView>(
         val oldPassword = oldPass.textString
         val newPassword = newPass.textString
         val repeatNewPassword = repeatNewPass.textString
-        if (TextUtils.isEmpty(oldPassword)) {
-            oldPass.showEmptyPasswordError()
-        } else if (checkPass(oldPassword)) {
-            if (TextUtils.isEmpty(newPassword)) {
-                newPass.showEmptyPasswordError()
-            } else if (newPassword == repeatNewPassword) {
-                changePassword(oldPassword, newPassword)
-                return true
-            } else {
-                repeatNewPass.showPasswordsNoMatchError()
+        when {
+            TextUtils.isEmpty(oldPassword) -> oldPass.showEmptyPasswordError()
+            checkPass(oldPassword) -> when {
+                TextUtils.isEmpty(newPassword) -> newPass.showEmptyPasswordError()
+                newPassword == repeatNewPassword -> {
+                    changePassword(oldPassword, newPassword)
+                    return true
+                }
+                else -> repeatNewPass.showPasswordsNoMatchError()
             }
-        } else {
-            oldPass.showIncorrectPasswordError()
+            else -> oldPass.showIncorrectPasswordError()
         }
 
         return false

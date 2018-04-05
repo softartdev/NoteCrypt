@@ -29,11 +29,14 @@ abstract class RealmDbRepository implements DbStore {
 
     @Override
     public boolean checkPass(String password) {
+        closeAllOpenedRealmInstances();
         try {
             RealmConfiguration.Builder builder = new RealmConfiguration.Builder();
             if (password != null) {
                 builder.encryptionKey(getSecureKey(password));
             }
+            builder.schemaVersion(1);
+            builder.migration(new NoteMigration());
             RealmConfiguration realmConfiguration = builder.build();
             mRealm = Realm.getInstance(realmConfiguration);
             return true;
@@ -60,12 +63,7 @@ abstract class RealmDbRepository implements DbStore {
         File tempFile = new File(dir, TEMP_FILE_NAME);
         mRealm.writeEncryptedCopyTo(tempFile, newKey);
 
-        int count = Realm.getGlobalInstanceCount(defaultConfig);
-        while (count != 0) {
-            Timber.d("Open %s instances of Realm", count);
-            mRealm.close();
-            count = Realm.getGlobalInstanceCount(defaultConfig);
-        }
+        closeAllOpenedRealmInstances();
 
         if (Realm.deleteRealm(defaultConfig)) {
             Timber.d("%s deleted", DEFAULT_FILE_NAME);
@@ -82,9 +80,23 @@ abstract class RealmDbRepository implements DbStore {
         if (newKey != null) {
             builder.encryptionKey(newKey);
         }
+        builder.schemaVersion(1);
+        builder.migration(new NoteMigration());
         defaultConfig = builder.build();
         Realm.setDefaultConfiguration(defaultConfig);
         mRealm = Realm.getDefaultInstance();
+    }
+
+    private void closeAllOpenedRealmInstances() {
+        if (mRealm != null) {
+            RealmConfiguration defaultConfig = mRealm.getConfiguration();
+            int count = Realm.getGlobalInstanceCount(defaultConfig);
+            while (count != 0) {
+                Timber.d("Open %s instances of Realm", count);
+                mRealm.close();
+                count = Realm.getGlobalInstanceCount(defaultConfig);
+            }
+        }
     }
 
     private byte[] getSecureKey(String pass){

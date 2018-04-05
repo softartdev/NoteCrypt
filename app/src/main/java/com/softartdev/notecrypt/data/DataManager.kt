@@ -4,7 +4,6 @@ import android.support.annotation.Nullable
 import com.softartdev.notecrypt.db.DbStore
 import com.softartdev.notecrypt.model.Note
 import io.reactivex.Single
-import io.realm.RealmResults
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -12,7 +11,7 @@ import javax.inject.Singleton
 class DataManager @Inject
 internal constructor(private val dbStore: DbStore) {
 
-    fun notes(): Single<RealmResults<Note>> {
+    fun notes(): Single<List<Note>> {
         return Single.fromCallable { dbStore.notes }
     }
 

@@ -9,10 +9,6 @@ import javax.inject.Inject
 class MainPresenter @Inject
 constructor(private val dataManager: DataManager) : BasePresenter<MainView>() {
 
-    override fun attachView(mvpView: MainView) {
-        super.attachView(mvpView)
-    }
-
     fun updateNotes() {
         checkViewAttached()
         addDisposable(dataManager.notes()

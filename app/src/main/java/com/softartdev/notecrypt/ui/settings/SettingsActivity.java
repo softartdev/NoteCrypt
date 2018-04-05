@@ -15,13 +15,13 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.MenuItem;
 
 import com.softartdev.notecrypt.BuildConfig;
 import com.softartdev.notecrypt.R;
 
 import java.util.List;
-import java.util.Locale;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -167,6 +167,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class LanguagePreferenceFragment extends SettingsFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+
+        static {
+            AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+        }
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -178,31 +183,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("language"));
             bindPreferenceSummaryToValue(findPreference("theme"));
         }
 
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if (key.equals("language")) {
-                Locale locale;
-                String value = sharedPreferences.getString(key, "2");
-                switch (value) {
-                    case "1":
-                        locale = Locale.ENGLISH;
-                        break;
-                    case "2":
-                        locale = new Locale("ru");
-                        break;
-                    default:
-                        locale = Locale.getDefault();
-                        break;
-                }
-                Locale.setDefault(locale);
-                Configuration configuration = getResources().getConfiguration();
-                configuration.locale = locale;
-                onConfigurationChanged(configuration);
-            } else if (key.equals("theme")) {
+            if (key.equals("theme")) {
                 settingsTheme(getActivity());
             }
             getActivity().recreate();

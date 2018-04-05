@@ -17,13 +17,13 @@ class FragmentModule(private val mFragment: Fragment) {
 
     @Provides
     internal fun provideActivity(): Activity {
-        return mFragment.activity
+        return mFragment.activity as Activity
     }
 
     @Provides
     @ActivityContext
     internal fun providesContext(): Context {
-        return mFragment.activity
+        return mFragment.activity as Context
     }
 
 }

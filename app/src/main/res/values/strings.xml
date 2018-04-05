@@ -45,19 +45,6 @@
     <!-- Settings for Appearance -->
     <string name="pref_header_appearance">Appearance</string>
 
-    <string name="pref_title_language">Language</string>
-
-    <string-array name="pref_language_titles">
-        <item>English</item>
-        <item>Russian</item>
-    </string-array>
-
-    <string-array name="pref_language_values" translatable="false">
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-
-
     <string name="pref_title_theme">Theme</string>
 
     <string name="pref_default_theme">Default</string>
