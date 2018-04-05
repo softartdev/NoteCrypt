@@ -2,7 +2,7 @@ package com.softartdev.notecrypt.ui.settings.security
 
 import com.softartdev.notecrypt.ui.base.MvpView
 
-internal interface SecurityView : MvpView {
+interface SecurityView : MvpView {
     fun showEncryptEnable(encryption: Boolean)
     fun showPasswordDialog()
     fun showSetPasswordDialog()
