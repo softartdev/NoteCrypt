@@ -7,6 +7,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,11 +22,17 @@ import com.softartdev.notecrypt.ui.base.BaseActivity;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 import javax.inject.Inject;
 
 public class SecurityActivity extends BaseActivity implements SecurityView, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
-    @Inject
-    SecurityPresenter mPresenter;
+
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
+
+    @Inject SecurityPresenter mPresenter;
 
     Switch enableEncryptionSwitch;
 
@@ -36,9 +43,11 @@ public class SecurityActivity extends BaseActivity implements SecurityView, View
         activityComponent().inject(this);
         mPresenter.attachView(this);
         enableEncryptionSwitch = findViewById(R.id.enable_encryption_switch);
+        enableEncryptionSwitch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_black_24dp, 0, 0, 0);
         enableEncryptionSwitch.setChecked(mPresenter.isEncryption());
         enableEncryptionSwitch.setOnCheckedChangeListener(this);
         Button passButton = findViewById(R.id.set_password_button);
+        passButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_password_black_24dp, 0, 0, 0);
         passButton.setOnClickListener(this);
     }
 
@@ -191,7 +200,7 @@ public class SecurityActivity extends BaseActivity implements SecurityView, View
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                NavUtils.navigateUpTo(this, NavUtils.getParentActivityIntent(this));
+                NavUtils.navigateUpTo(this, Objects.requireNonNull(NavUtils.getParentActivityIntent(this)));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
