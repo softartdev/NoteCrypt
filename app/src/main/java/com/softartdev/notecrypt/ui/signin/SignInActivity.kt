@@ -2,40 +2,49 @@ package com.softartdev.notecrypt.ui.signin
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.TextInputLayout
-import android.view.KeyEvent
-import android.view.View
-import android.view.inputmethod.EditorInfo
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-
 import com.softartdev.notecrypt.R
 import com.softartdev.notecrypt.ui.base.BaseActivity
 import com.softartdev.notecrypt.ui.main.MainActivity
-
+import io.github.tonnyl.spark.Spark
+import kotlinx.android.synthetic.main.activity_sign_in.*
 import javax.inject.Inject
 
-class SignInActivity : BaseActivity(), SignInView, TextView.OnEditorActionListener, View.OnClickListener {
+class SignInActivity : BaseActivity(), SignInView {
     @Inject lateinit var mPresenter: SignInPresenter
 
-    internal var passInputLayout: TextInputLayout? = null
-    internal var passEditText: EditText? = null
+    private lateinit var mSpark: Spark
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_in)
         activityComponent().inject(this)
         mPresenter.attachView(this)
-        passInputLayout = findViewById<TextInputLayout>(R.id.password_text_input_layout)
-        passEditText = findViewById<EditText>(R.id.password_edit_text)
-        passEditText?.setOnEditorActionListener(this)
-        val signInButton = findViewById<Button>(R.id.sign_in_button)
-        signInButton.setOnClickListener(this)
+
+        password_edit_text.setOnEditorActionListener { _, _, _ ->
+            attemptSignIn()
+            true
+        }
+        sign_in_button.setOnClickListener { attemptSignIn() }
+
+        mSpark = Spark.Builder()
+                .setView(sign_in_layout) // View or view group
+                .setDuration(4000)
+                .setAnimList(Spark.ANIM_GREEN_PURPLE)
+                .build()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mSpark.startAnimation()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mSpark.stopAnimation()
     }
 
     private fun attemptSignIn() {
-        mPresenter.signIn(passEditText?.text.toString())
+        mPresenter.signIn(password_edit_text?.text.toString())
     }
 
     override fun navMain() {
@@ -45,29 +54,15 @@ class SignInActivity : BaseActivity(), SignInView, TextView.OnEditorActionListen
     }
 
     override fun hideError() {
-        passInputLayout?.error = null
+        password_text_input_layout?.error = null
     }
 
     override fun showEmptyPassError() {
-        passInputLayout?.error = getString(R.string.empty_password)
+        password_text_input_layout?.error = getString(R.string.empty_password)
     }
 
     override fun showIncorrectPassError() {
-        passInputLayout?.error = getString(R.string.incorrect_password)
-    }
-
-    override fun onEditorAction(textView: TextView, id: Int, keyEvent: KeyEvent): Boolean {
-        if (id == R.id.sign_in_ime_action || id == EditorInfo.IME_NULL) {
-            attemptSignIn()
-            return true
-        }
-        return false
-    }
-
-    override fun onClick(v: View) {
-        when (v.id) {
-            R.id.sign_in_button -> attemptSignIn()
-        }
+        password_text_input_layout?.error = getString(R.string.incorrect_password)
     }
 
     override fun onDestroy() {

@@ -59,7 +59,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
 
-    implementation "com.jakewharton.timber:timber:4.6.0"
+    implementation "com.jakewharton.timber:timber:4.7.0"
     implementation "com.facebook.stetho:stetho-okhttp3:1.5.0"
     implementation "com.squareup.leakcanary:leakcanary-android:1.5.4"
 
@@ -72,6 +72,8 @@ dependencies {
     }
 //    testCompile 'com.github.jonasrottmann.realm-browser:realm-browser-no-op:0.0.13'
     releaseImplementation 'com.github.jonasrottmann.realm-browser:realm-browser-no-op:0.0.13'
+
+    implementation 'io.github.tonnyl:spark:0.1.0-alpha'
 
     kaptTest "com.google.dagger:dagger-compiler:$dagger_version"
     testImplementation "junit:junit:4.12"
