@@ -12,7 +12,7 @@ import com.softartdev.notecrypt.di.component.ActivityComponent
 import com.softartdev.notecrypt.di.component.ConfigPersistentComponent
 import com.softartdev.notecrypt.di.component.DaggerConfigPersistentComponent
 import com.softartdev.notecrypt.di.module.ActivityModule
-import com.softartdev.notecrypt.ui.settings.SettingsActivity
+import com.softartdev.notecrypt.ui.settings.security.SecurityActivity
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicLong
 
@@ -75,7 +75,7 @@ abstract class BaseActivity : AppCompatActivity() {
                 true
             }
             R.id.action_settings -> {
-                startActivity(Intent(this, SettingsActivity::class.java))
+                startActivity(Intent(this, SecurityActivity::class.java))
                 true
             }
             else -> super.onOptionsItemSelected(item)
