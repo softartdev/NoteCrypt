@@ -1,4 +1,4 @@
-package com.softartdev.notecrypt.ui.settings.security
+package com.softartdev.notecrypt.ui.security
 
 import com.softartdev.notecrypt.ui.base.MvpView
 

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.util.LongSparseArray
 import android.support.v7.app.AppCompatActivity
-import android.view.Menu
 import android.view.MenuItem
 import com.softartdev.notecrypt.App
 import com.softartdev.notecrypt.R
@@ -12,7 +11,7 @@ import com.softartdev.notecrypt.di.component.ActivityComponent
 import com.softartdev.notecrypt.di.component.ConfigPersistentComponent
 import com.softartdev.notecrypt.di.component.DaggerConfigPersistentComponent
 import com.softartdev.notecrypt.di.module.ActivityModule
-import com.softartdev.notecrypt.ui.settings.security.SecurityActivity
+import com.softartdev.notecrypt.ui.security.SecurityActivity
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicLong
 
@@ -63,18 +62,13 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
                 finish()
                 true
             }
-            R.id.action_settings -> {
+            R.id.action_security -> {
                 startActivity(Intent(this, SecurityActivity::class.java))
                 true
             }

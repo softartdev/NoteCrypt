@@ -6,7 +6,17 @@ apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+    buildToolsVersion '28.0.0'
+    defaultConfig {
+        applicationId "com.softartdev.notecrypt"
+        minSdkVersion 15
+        //noinspection OldTargetApi
+        targetSdkVersion 27
+        versionCode 8
+        versionName "1.8"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+    }
     if(project.hasProperty("RELEASE_STORE_FILE")) {
         signingConfigs {
             config {
@@ -16,15 +26,6 @@ android {
                 keyPassword RELEASE_KEY_PASSWORD
             }
         }
-    }
-    defaultConfig {
-        applicationId "com.softartdev.notecrypt"
-        minSdkVersion 15
-        targetSdkVersion 27
-        versionCode 7
-        versionName "1.7"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -50,31 +51,25 @@ dependencies {
     implementation "com.android.support:recyclerview-v7:$support_version"
     implementation "com.android.support:cardview-v7:$support_version"
     implementation "com.android.support:support-vector-drawable:$support_version"
-    implementation "com.android.support.constraint:constraint-layout:1.1.0"
-
+    implementation 'com.android.support.constraint:constraint-layout:1.1.1'
     implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
-
-    implementation "com.jakewharton.timber:timber:4.7.0"
-    implementation "com.facebook.stetho:stetho-okhttp3:1.5.0"
-    implementation "com.squareup.leakcanary:leakcanary-android:1.5.4"
-
+    implementation 'com.jakewharton.timber:timber:4.7.0'
+    implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
+    implementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     def dagger_version = "2.8"
     implementation "com.google.dagger:dagger:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
-    compileOnly 'org.glassfish:javax.annotation:10.0-b28' //Required by Dagger2
-
-    debugImplementation ('com.github.jonasrottmann.realm-browser:realm-browser:0.0.13') {
+    compileOnly 'org.glassfish:javax.annotation:10.0-b28'
+    //Required by Dagger2
+    debugImplementation('com.github.jonasrottmann.realm-browser:realm-browser:0.0.13') {
         exclude group: 'com.android.support'
     }
-//    testCompile 'com.github.jonasrottmann.realm-browser:realm-browser-no-op:0.0.13'
+    //    testCompile 'com.github.jonasrottmann.realm-browser:realm-browser-no-op:0.0.13'
     releaseImplementation 'com.github.jonasrottmann.realm-browser:realm-browser-no-op:0.0.13'
-
     implementation 'io.github.tonnyl:spark:0.1.0-alpha'
-
     kaptTest "com.google.dagger:dagger-compiler:$dagger_version"
-    testImplementation "junit:junit:4.12"
-
+    testImplementation 'junit:junit:4.12'
     kaptAndroidTest "com.google.dagger:dagger-compiler:$dagger_version"
     androidTestImplementation("com.android.support.test.espresso:espresso-core:2.2.2", {
         exclude group: "com.android.support", module: "support-annotations"

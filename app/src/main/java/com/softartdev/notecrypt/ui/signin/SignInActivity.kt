@@ -2,6 +2,7 @@ package com.softartdev.notecrypt.ui.signin
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import com.softartdev.notecrypt.R
 import com.softartdev.notecrypt.ui.base.BaseActivity
 import com.softartdev.notecrypt.ui.main.MainActivity
@@ -63,6 +64,8 @@ class SignInActivity : BaseActivity(), SignInView {
     override fun showIncorrectPassError() {
         password_text_input_layout?.error = getString(R.string.incorrect_password)
     }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean = true
 
     override fun onDestroy() {
         mPresenter.detachView()

@@ -2,6 +2,8 @@ package com.softartdev.notecrypt.ui.main
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import com.softartdev.notecrypt.R
 import com.softartdev.notecrypt.model.Note
@@ -26,7 +28,7 @@ class MainActivity : BaseActivity(), MainView, MainAdapter.ClickListener {
 
         setSupportActionBar(main_toolbar)
 
-        add_note_fab.setOnClickListener { mPresenter.addNote() }
+        add_note_fab.setOnClickListener { startActivity(NoteActivity.getStartIntent(this, 0L)) }
 
         mAdapter.clickListener = this
         notes_recycler_view.apply {
@@ -62,8 +64,18 @@ class MainActivity : BaseActivity(), MainView, MainAdapter.ClickListener {
         startActivity(NoteActivity.getStartIntent(this, noteId))
     }
 
-    override fun onAddNote() {
-        startActivity(NoteActivity.getStartIntent(this, 0L))
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_release -> {
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onDestroy() {

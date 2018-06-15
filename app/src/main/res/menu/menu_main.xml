@@ -3,8 +3,14 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="com.softartdev.notecrypt.ui.main.MainActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_release"
+        android:icon="@drawable/ic_new_releases_white_24dp"
+        android:title="@string/new_releases_available"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_security"
+        android:icon="@drawable/ic_security_white_24dp"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never"/>
+        android:title="@string/security"
+        app:showAsAction="ifRoom" />
 </menu>
