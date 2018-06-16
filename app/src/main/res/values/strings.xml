@@ -26,4 +26,6 @@
     <string name="empty_password">Password must not be empty</string>
     <string name="passwords_do_not_match">Passwords do not match</string>
     <string name="new_releases_available">New releases available</string>
+    <string name="new_releases_dialog_message">Support for this project is not planned in the future. We recommend trying Note Room, it\'s our new product, which is also an open source project.</string>
+    <string name="unknown">Unknown</string>
 </resources>

@@ -26,4 +26,6 @@
     <string name="passwords_do_not_match">Пароли не совпадают</string>
     <string name="sign_in">Войти</string>
     <string name="new_releases_available">Доступна новая версия</string>
+    <string name="new_releases_dialog_message">Поддержка этого проекта в будущем не планируется. Мы рекомендуем попробовать Note Room - это наш новый продукт, который также является проектом с открытым исходным кодом.</string>
+    <string name="unknown">Без названия</string>
 </resources>

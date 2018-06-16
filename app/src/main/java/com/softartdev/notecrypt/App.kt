@@ -11,7 +11,7 @@ import timber.log.Timber
 
 class App : Application() {
 
-    internal var mApplicationComponent: ApplicationComponent? = null
+    private var mApplicationComponent: ApplicationComponent? = null
 
     override fun onCreate() {
         super.onCreate()

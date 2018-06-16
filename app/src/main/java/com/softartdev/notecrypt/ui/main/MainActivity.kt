@@ -1,6 +1,7 @@
 package com.softartdev.notecrypt.ui.main
 
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
@@ -13,6 +14,9 @@ import io.github.tonnyl.spark.Spark
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject
+import android.content.Intent
+import android.net.Uri
+
 
 class MainActivity : BaseActivity(), MainView, MainAdapter.ClickListener {
     @Inject lateinit var mPresenter: MainPresenter
@@ -72,9 +76,25 @@ class MainActivity : BaseActivity(), MainView, MainAdapter.ClickListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_release -> {
+                with(AlertDialog.Builder(this)) {
+                    setMessage(R.string.new_releases_dialog_message)
+                    setPositiveButton(android.R.string.yes) { _, _ -> navGooglePlay() }
+                    setNegativeButton(android.R.string.cancel) { dialog, _ -> dialog.cancel() }
+                    show()
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun navGooglePlay() {
+        val packageNoteRoom = "com.softartdev.noteroom"
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageNoteRoom")))
+        } catch (e: android.content.ActivityNotFoundException) {
+            e.printStackTrace()
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$packageNoteRoom")))
         }
     }
 
