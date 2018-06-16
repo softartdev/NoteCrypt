@@ -5,7 +5,7 @@ import com.softartdev.notecrypt.di.module.ActivityModule
 import com.softartdev.notecrypt.ui.base.BaseActivity
 import com.softartdev.notecrypt.ui.main.MainActivity
 import com.softartdev.notecrypt.ui.note.NoteActivity
-import com.softartdev.notecrypt.ui.settings.security.SecurityActivity
+import com.softartdev.notecrypt.ui.security.SecurityActivity
 import com.softartdev.notecrypt.ui.signin.SignInActivity
 import com.softartdev.notecrypt.ui.splash.SplashActivity
 import dagger.Subcomponent

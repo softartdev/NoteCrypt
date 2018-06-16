@@ -1,4 +1,4 @@
-package com.softartdev.notecrypt.ui.settings.security
+package com.softartdev.notecrypt.ui.security
 
 import android.text.TextUtils
 import com.softartdev.notecrypt.data.DataManager

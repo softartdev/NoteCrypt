@@ -38,48 +38,12 @@
                 android:value="com.softartdev.notecrypt.ui.main.MainActivity"/>
         </activity>
         <activity
-            android:name=".ui.settings.SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:parentActivityName=".ui.main.MainActivity"
-            tools:targetApi="jelly_bean">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.softartdev.notecrypt.ui.main.MainActivity"/>
-        </activity>
-        <activity
-            android:name=".ui.settings.security.SecurityActivity"
-            android:label="@string/pref_header_security"
-            android:parentActivityName=".ui.settings.SettingsActivity"
-            android:theme="@style/AppTheme"
-            tools:targetApi="jelly_bean">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.softartdev.notecrypt.ui.settings.SettingsActivity"/>
-
-            <intent-filter>
-                <action android:name="NoteCryptSecurityActivity"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-        </activity>
+            android:name="com.softartdev.notecrypt.ui.security.SecurityActivity"
+            android:label="@string/security"
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".ui.signin.SignInActivity"
             android:label="@string/sign_in">
-        </activity>
-
-        <activity android:name=".ui.storage.StorageActivity"
-                  android:label="@string/pref_header_storage"
-                  android:parentActivityName=".ui.settings.SettingsActivity"
-                  tools:targetApi="jelly_bean">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.softartdev.notecrypt.ui.settings.SettingsActivity"/>
-
-            <intent-filter>
-                <action android:name="NoteCryptStorageActivity"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
         </activity>
     </application>
 
